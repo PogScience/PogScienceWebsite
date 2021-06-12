@@ -1,6 +1,7 @@
+### PogScience ###
 
-# Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,python,pycharm,django
-# Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,python,pycharm,django
+secrets.toml
+
 
 ### Django ###
 *.log
