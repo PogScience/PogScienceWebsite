@@ -19,6 +19,4 @@ from streamers.views import HomeView
 
 app_name = "streamers"
 
-urlpatterns = [
-    path("", HomeView.as_view(), name="home")
-]
+urlpatterns = [path("", HomeView.as_view(), name="home")]
