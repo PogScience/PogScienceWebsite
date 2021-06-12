@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Qui ?" %}</h1>
+        <p class="subtitle">
+            {% blocktrans count count=streamers|length %}
+                {{ count }} streamer
+            {% plural %}
+                {{ count }} streamers
+            {% endblocktrans %}
+        </p>
+
+    <ul>
+        {% for streamer in streamers %}
+            <li>{{ streamer.name }} ({{ streamer.twitck_login }})</li>
+        {% endfor %}
+    </ul>
+    </div>
+</section>
+{% endblock %}
