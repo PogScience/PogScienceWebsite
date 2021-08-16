@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 django-debug-toolbar = "*"
 toml = "*"
+social-auth-app-django = "*"
 
 [dev-packages]
 

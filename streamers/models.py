@@ -13,6 +13,7 @@ class Streamer(models.Model):
         on_delete=models.SET_NULL,
         verbose_name=_("Compte interne du streamer"),
         null=True,
+        blank=True,
         default=None,
     )
 
@@ -32,12 +33,14 @@ class Streamer(models.Model):
         help_text=_(
             "Une courte description affichée par exemple sur la page d'accueil"
         ),
+        blank=True,
     )
     long_description = models.TextField(
         verbose_name=_("Longue description"),
         help_text=_(
             "Description potentiellement très longue affichée sur la page du streamer ou de la streameuse"
         ),
+        blank=True,
     )
 
     live = models.BooleanField(

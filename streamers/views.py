@@ -7,4 +7,4 @@ from streamers.models import Streamer
 
 class HomeView(TemplateView):
     template_name = "home.html"
-    extra_context = {"streamers": Streamer.objects.all(), "settings": settings.POG}
+    extra_context = {"streamers": Streamer.objects.all()}

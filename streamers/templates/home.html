@@ -14,11 +14,11 @@
             {% endblocktrans %}
         </p>
 
-    <ul>
-        {% for streamer in streamers %}
-            <li>{{ streamer.name }} ({{ streamer.twitck_login }})</li>
-        {% endfor %}
-    </ul>
+        <ul>
+            {% for streamer in streamers %}
+                <li>{{ streamer.name }} ({{ streamer.twitck_login }})</li>
+            {% endfor %}
+        </ul>
     </div>
 </section>
 {% endblock %}

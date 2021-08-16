@@ -20,13 +20,15 @@
 
             <div class="navbar-end">
                 {% if request.user.is_anonymous %}
-                    <div class="navbar-item">
-                        <div class="buttons">
-                            <a class="button is-link is-light">
-                                Se connecter avec Twitch
-                            </a>
+                    {% if twitch.enabled %}
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-link is-light" href="{% url "social:begin" "twitch" %}">
+                                    Se connecter avec Twitch
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% else %}
                     <div class="navbar-item">{{ request.user.username }}</div>
                     <div class="navbar-item">
@@ -34,7 +36,7 @@
                             <a class="button is-link is-light" href="{% url "admin:index" %}">
                                 Administration
                             </a>
-                            <a class="button is-ghost is-light">
+                            <a class="button is-ghost is-light" href="{% url "logout" %}">
                                 Déconnexion
                             </a>
                         </div>
