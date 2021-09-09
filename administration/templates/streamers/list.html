@@ -21,6 +21,13 @@
             </button>
         </div>
     {% endif %}
+    {% if user.is_staff and perms.streamers.change_streamer or perms.streamers.delete_streamer %}
+        <div class="level-item">
+            <a href="{% url "admin:streamers_streamer_changelist" %}" class="button is-primary is-light" title="{% trans "Plus d'options d'administration" %}">
+                <span class="icon"><span class="fas fa-ellipsis-h"></span></span>
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block admin_content %}

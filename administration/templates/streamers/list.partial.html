@@ -26,8 +26,13 @@
             </div>
             <footer class="card-footer">
                 <a href="#" class="card-footer-item">{% trans "Voir" %}</a>
-                <a href="#" class="card-footer-item">{% trans "Modifier" %}</a>
-                <a href="#" class="card-footer-item">{% trans "Supprimer" %}</a>
+
+                {% if perms.streamers.change_streamer or streamer.user == user %}
+                    <a href="#" class="card-footer-item">{% trans "Modifier" %}</a>
+                {% endif %}
+                {% if user.is_staff and perms.streamers.delete_streamer %}
+                    <a href="{% url "admin:streamers_streamer_delete" streamer.id %}" class="card-footer-item">{% trans "Supprimer" %}</a>
+                {% endif %}
             </footer>
         </div>
     </div>

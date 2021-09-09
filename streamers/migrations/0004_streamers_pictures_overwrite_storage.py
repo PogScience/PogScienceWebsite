@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='streamer',
             name='profile_image',
-            field=models.ImageField(blank=True, null=True, storage=pogscience.storage.OverwriteStorage(), upload_to=streamers.models.profile_image_upload_to, verbose_name='Image de profil'),
+            field=models.ImageField(blank=True, null=True, storage=pogscience.storage.OverwriteStorage(), upload_to=streamers.models.image_upload_to, verbose_name='Image de profil'),
         ),
     ]

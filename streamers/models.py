@@ -14,13 +14,31 @@ class User(AbstractUser):
     pass
 
 
-def profile_image_upload_to(instance, filename: str):
+def image_upload_to(folder):
     """
-    Used by Django, returns the filename to use for the streamers' profile
-    pictures.
+    Generates a function returning the filename to use for a streamer profile
+    picture, or background image, or other. The image will be named against the
+    streamer, in the given folder.
+    
+    :param folder: The folder where to store the image. 
+    :return: A function for Django FileField's upload_to.
     """
-    _, ext = os.path.splitext(filename)
-    return f'twitch/profile/{instance.twitch_login}{ext}'
+    def _inner(instance, filename: str):
+        """
+        Used by Django, returns the filename to use for the streamers' profile
+        pictures.
+        """
+        _, ext = os.path.splitext(filename)
+        return f'twitch/{folder}/{instance.twitch_login}{ext}'
+    return _inner
+
+
+def profile_image_upload_to(*args, **kwargs):
+    return image_upload_to("profile")(*args, **kwargs)
+
+
+def background_image_upload_to(*args, **kwargs):
+    return image_upload_to("background")(*args, **kwargs)
 
 
 class Streamer(models.Model):
@@ -71,6 +89,13 @@ class Streamer(models.Model):
         null=True,
         blank=True
     )
+    background_image = models.ImageField(
+        verbose_name=_("Image de fond"),
+        storage=OverwriteStorage(),
+        upload_to=background_image_upload_to,
+        null=True,
+        blank=True
+    )
 
     live = models.BooleanField(
         verbose_name=_("Est en live actuellement"),
@@ -115,9 +140,18 @@ class Streamer(models.Model):
 
         self.description = twitch_data["description"]
 
-        res_profile_image = requests.get(twitch_data["profile_image_url"])
-        if res_profile_image.ok:
-            profile_image = BytesIO()
-            profile_image.write(res_profile_image.content)
-            filename = f'image{os.path.splitext(twitch_data["profile_image_url"])[1]}'
-            self.profile_image.save(filename, files.File(profile_image))
+        def _download_and_store_image(key, field):
+            if not twitch_data[key]:
+                return
+
+            res_image = requests.get(twitch_data[key])
+            if not res_image.ok:
+                return
+
+            image = BytesIO()
+            image.write(res_image.content)
+            filename = f'image{os.path.splitext(twitch_data[key])[1]}'
+            field.save(filename, files.File(image))
+
+        _download_and_store_image("profile_image_url", self.profile_image)
+        _download_and_store_image("offline_image_url", self.background_image)

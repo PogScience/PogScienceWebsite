@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='streamer',
             name='profile_image',
-            field=models.ImageField(blank=True, null=True, upload_to=streamers.models.profile_image_upload_to, verbose_name='Image de profil'),
+            field=models.ImageField(blank=True, null=True, upload_to=streamers.models.image_upload_to, verbose_name='Image de profil'),
         ),
         migrations.AddField(
             model_name='streamer',

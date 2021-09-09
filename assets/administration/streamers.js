@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     document.querySelectorAll('.js-update-streamers').forEach(button => {
+        const buttonIcon = button.querySelector("span.icon > span.fas")
         button.addEventListener('click', ev => {
             ev.preventDefault()
             if (!confirm("Êtes-vous sûr(e) de mettre à jour les streamers depuis Twitch ? Les noms, avatars, et courtes descriptions seront écrasées avec les données de Twitch."))
@@ -56,12 +57,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     'X-CSRFToken': csrf
                 }
             })
-                .then(() => button.classList.add("is-success"))
-                .catch(() => button.classList.add("is-danger"))
+                .then(() => {
+                    button.classList.add("is-success")
+                    buttonIcon.classList.toggle("fa-sync-alt", false)
+                    buttonIcon.classList.toggle("fa-check", true)
+                })
+                .catch(() => {
+                    button.classList.add("is-danger")
+                    buttonIcon.classList.toggle("fa-sync-alt", false)
+                    buttonIcon.classList.toggle("fa-times", true)
+                })
                 .finally(() => {
                     button.classList.remove('is-loading')
                     updateStreamers()
-                    setTimeout(() => button.classList.remove('is-success', 'is-danger'), 2000)
+                    setTimeout(() => {
+                        button.classList.remove('is-success', 'is-danger')
+                        buttonIcon.classList.toggle("fa-sync-alt", true)
+                        buttonIcon.classList.toggle("fa-check", false)
+                        buttonIcon.classList.toggle("fa-times", false)
+                    }, 5000)
                 })
         })
     })
