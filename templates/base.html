@@ -5,9 +5,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head itemscope>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta itemprop="csrfmiddlewaretoken" content="{{ csrf_token }}" />
 
     {% render_bundle 'main' 'css' is_preload=True %}
     {% render_bundle 'main' 'js' is_preload=True %}

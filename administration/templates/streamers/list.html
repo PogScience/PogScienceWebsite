@@ -7,7 +7,7 @@
 {% block admin_title_right %}
     {% if perms.streamers.change_streamer %}
         <div class="level-item">
-            <button class="button is-primary is-light js-add-streamers">
+            <button class="button is-primary is-light js-update-streamers">
                 <span class="icon"><span class="fas fa-sync-alt"></span></span>
                 <span>Actualiser depuis Twitch</span>
             </button>
@@ -24,55 +24,8 @@
 {% endblock %}
 
 {% block admin_content %}
-    <div class="columns is-multiline">
-        {% for streamer in streamers %}
-            <div class="column is-half">
-                <div class="card admin-streamer">
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-64x64">
-                                    <img src="{{ streamer.profile_image.url }}" alt="{{ streamer.name }}">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <p class="title is-4">
-                                    {{ streamer.name }}
-                                    {% if streamer.live %}<span class="tag is-danger">LIVE</span>{% endif %}
-                                </p>
-                                <p class="subtitle is-6"><a href="https://twitch.tv/{{ streamer.twitch_login }}" target="_blank">@{{ streamer.twitch_login }}</a></p>
-                            </div>
-                        </div>
-
-                        <div class="content">
-                            {{ streamer.description }}
-                        </div>
-                    </div>
-                    <footer class="card-footer">
-                        <a href="#" class="card-footer-item">{% trans "Voir" %}</a>
-                        <a href="#" class="card-footer-item">{% trans "Modifier" %}</a>
-                        <a href="#" class="card-footer-item">{% trans "Supprimer" %}</a>
-                    </footer>
-                </div>
-            </div>
-        {% empty %}
-            <div class="column is-half is-offset-one-quarter has-text-centered mt-5">
-                <p class="title is-4 block">Il n'y a personne d'enregistré…</p>
-                {% if perms.streamers.add_streamer %}
-                    <p class="block">
-                        Cliquez ci-dessous pour ajouter tout le monde ! Vous pourrez
-                        ajouter plusieurs personnes d'un coup, et nous récupèrerons
-                        automatiquement les données de base depuis Twitch.
-                    </p>
-                    <button class="button is-primary js-add-streamers block">
-                        <span class="icon"><span class="fas fa-plus"></span></span>
-                        <span>Ajouter des streamers <span class="is-hidden-mobile">à PogScience</span></span>
-                    </button>
-                {% else %}
-                    <p class="block">{% trans "Un⋅e administrateur⋅trice peut ajouter du monde dans PogScience." %}</p>
-                {% endif %}
-            </div>
-        {% endfor %}
+    <div class="columns is-multiline" id="js-streamers-list">
+        {% include "streamers/list.partial.html" %}
     </div>
 
     {% if perms.streamers.add_streamer %}

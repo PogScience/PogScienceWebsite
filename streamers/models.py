@@ -98,6 +98,9 @@ class Streamer(models.Model):
         ),
     )
 
+    def __str__(self):
+        return f"{self.name} – @{self.twitch_login}"
+
     def update_from_twitch_data(self, twitch_data):
         """
         Updates this instance using the data returned by Twitch. Does not save

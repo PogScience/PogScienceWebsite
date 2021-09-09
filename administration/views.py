@@ -1,10 +1,12 @@
 import re
+from http import HTTPStatus
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import transaction
 from django.forms import model_to_dict
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import FormView, ListView, RedirectView
 
 from pogscience.twitch import get_twitch_client
@@ -22,14 +24,17 @@ class IndexView(LoginRequiredMixin, RedirectView):
 
 
 class StreamersView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
+    partial = False
     permission_required = ["streamers.view_streamer"]
     model = Streamer
     context_object_name = "streamers"
-    template_name = "streamers/list.html"
 
     extra_context = {
         'add_streamers_form': AddStreamersForm()
     }
+
+    def get_template_names(self):
+        return "streamers/list.partial.html" if self.partial else "streamers/list.html"
 
 
 class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
@@ -44,7 +49,6 @@ class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
         streamer_names = [name for name in re.split(r',|\s', form.cleaned_data['streamers_names'].strip()) if name]
 
         streamers_twitch = get_twitch_client().get_users(streamer_names)
-        streamers = []
 
         with transaction.atomic():
             for streamer in streamers_twitch:
@@ -56,11 +60,23 @@ class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
                 streamer_model.update_from_twitch_data(streamer)
                 streamer_model.save()
 
-                streamer_dict = model_to_dict(streamer_model)
-                streamer_dict['profile_image'] = streamer_model.profile_image.url
+        return HttpResponse(status=HTTPStatus.CREATED)
 
-                streamers.append(streamer_dict)
 
-        return JsonResponse({
-            'streamers': streamers
-        })
+class UpdateStreamersFromTwitch(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = ["streamers.change_streamer"]
+
+    def post(self, request):
+        streamers = Streamer.objects.all()
+        ids = [streamer.twitch_id for streamer in streamers]
+        # We use string keys because Twitch returns string ids
+        streamers = {str(streamer.twitch_id): streamer for streamer in streamers}
+
+        streamers_twitch = get_twitch_client().get_users(ids=ids)
+
+        for streamer in streamers_twitch:
+            streamer_model = streamers[streamer['id']]
+            streamer_model.update_from_twitch_data(streamer)
+            streamer_model.save()
+
+        return HttpResponse(status=HTTPStatus.NO_CONTENT)
