@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
@@ -23,6 +24,12 @@ urlpatterns = [
     path("", include("streamers.urls", namespace="streamers")),
     path('', include('social_django.urls', namespace='social')),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
-    path("admin/", admin.site.urls),
+    path("admin/", include("administration.urls", namespace="administration")),
+    path("admin/django/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
 ]
+
+# Serves media in debug mode
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

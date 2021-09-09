@@ -1,0 +1,22 @@
+{% extends "admin_base.html" %}
+{% load bulma_tags %}
+
+{% block admin_title %}Nouveaux streamers{% endblock %}
+{% block admin_subtitle %}Pog grandit ?{% endblock %}
+
+{% block admin_content %}
+    <p class="block">
+        Ajoutez des streamers en entrant un pseudo Twitch par ligne dans le
+        champ ci-dessous. Nous récupèrerons les informations de base sur chacun⋅e
+        automatiquement.
+    </p>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form|bulma_inline }}
+
+        <div class="control">
+          <input type="submit" class="button is-primary" value="Ajouter les streamers" />
+        </div>
+    </form>
+{% endblock %}

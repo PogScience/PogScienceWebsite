@@ -1,13 +1,32 @@
+import os
+from io import BytesIO
+
+import requests
+from django.core import files
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
+
+from pogscience.storage import OverwriteStorage
 
 
 class User(AbstractUser):
     pass
 
 
+def profile_image_upload_to(instance, filename: str):
+    """
+    Used by Django, returns the filename to use for the streamers' profile
+    pictures.
+    """
+    _, ext = os.path.splitext(filename)
+    return f'twitch/profile/{instance.twitch_login}{ext}'
+
+
 class Streamer(models.Model):
+    class Meta:
+        ordering = ['name', 'twitch_login']
+
     user = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
@@ -27,6 +46,9 @@ class Streamer(models.Model):
         max_length=64,
         help_text=_("Utilisé pour récupérer les informations automatiquement"),
     )
+    twitch_id = models.PositiveBigIntegerField(
+        verbose_name=_("L'identifiant numérique Twitch")
+    )
     description = models.CharField(
         verbose_name=_("Courte description"),
         max_length=512,
@@ -42,10 +64,18 @@ class Streamer(models.Model):
         ),
         blank=True,
     )
+    profile_image = models.ImageField(
+        verbose_name=_("Image de profil"),
+        storage=OverwriteStorage(),
+        upload_to=profile_image_upload_to,
+        null=True,
+        blank=True
+    )
 
     live = models.BooleanField(
         verbose_name=_("Est en live actuellement"),
         help_text=_("Est-iel en live actuellement ? Mis à jour automatiquement"),
+        default=False
     )
     live_title = models.CharField(
         verbose_name=_("Titre du live"),
@@ -67,3 +97,24 @@ class Streamer(models.Model):
             "La catégorie du live en cours, récupéré automatiquement depuis Twitch"
         ),
     )
+
+    def update_from_twitch_data(self, twitch_data):
+        """
+        Updates this instance using the data returned by Twitch. Does not save
+        the instance.
+
+        :param twitch_data: The Twitch data: https://dev.twitch.tv/docs/api/reference#get-users
+        """
+        self.name = twitch_data["display_name"]
+
+        self.twitch_id = twitch_data["id"]
+        self.twitch_login = twitch_data["login"]
+
+        self.description = twitch_data["description"]
+
+        res_profile_image = requests.get(twitch_data["profile_image_url"])
+        if res_profile_image.ok:
+            profile_image = BytesIO()
+            profile_image.write(res_profile_image.content)
+            filename = f'image{os.path.splitext(twitch_data["profile_image_url"])[1]}'
+            self.profile_image.save(filename, files.File(profile_image))

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <main class="container section">
+        <div class="columns">
+            <aside class="column is-3 menu">
+                <p class="menu-label">
+                    Administration de PogScience
+                </p>
+
+                <ul class="menu-list">
+                    {% if perms.streamers.view_streamer %}
+                        <li><a class="is-active" href="{% url "administration:streamers" %}">Streamers</a></li>
+                    {% endif %}
+
+                    {% if user.is_staff %}
+                    <li>
+                        <a href="{% url "admin:index" %}">Administration système</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </aside>
+
+            <section class="column">
+                <div class="level">
+                    <div class="level-left">
+                        <header class="level-item">
+                            {% block admin_header %}
+                                <h1 class="title">{% block admin_title %}{% trans "Administration" %}{% endblock %}</h1>
+                            {% endblock %}
+                        </header>
+                    </div>
+                    <div class="level-right">
+                        <div class="level-item">{% block admin_title_right %}{% endblock %}</div>
+                    </div>
+                </div>
+
+                {% block admin_content %}{% endblock %}
+            </section>
+        </div>
+    </main>
+
+{% endblock %}

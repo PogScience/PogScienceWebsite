@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+// Set your brand colors
+$pog-green: #0dcd06;
+$pog-green-dark: #077b03;
+$pog-green-lighter: #f2fcf2;
+$pog-green-lightest: #f7fdf7;
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito", sans-serif;
+$primary: $pog-green;
+$link: $pog-green-dark;
+
+// Update some of Bulma's component variables
+$body-background-color: $pog-green-lighter;
+$input-background-color: $pog-green-lightest;
+$button-text-decoration: none;
+$card-radius: 6px;
+
+// Import only what you need from Bulma
+@import "~bulma/sass/utilities/all";
+@import "~bulma/sass/base/all";
+@import "~bulma/sass/helpers/all";  // FIXME remove
+@import "~bulma/sass/grid/all";
+@import "~bulma/sass/elements/other";
+@import "~bulma/sass/elements/button";
+@import "~bulma/sass/elements/container";
+@import "~bulma/sass/elements/image";
+@import "~bulma/sass/elements/title";
+@import "~bulma/sass/elements/tag";
+@import "~bulma/sass/form/all";
+@import "~bulma/sass/components/card";
+@import "~bulma/sass/components/navbar";
+@import "~bulma/sass/components/menu";
+@import "~bulma/sass/components/media";
+@import "~bulma/sass/components/level";
+@import "~bulma/sass/components/modal";
+@import "~bulma/sass/layout/section";
+
+@import "sass/administration/all";

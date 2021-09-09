@@ -13,6 +13,8 @@ import toml
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -52,8 +54,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "webpack_loader",
     "social_django",
+    "bulma",
     "streamers",
+    "administration",
 ]
 
 MIDDLEWARE = [
@@ -94,7 +99,7 @@ WSGI_APPLICATION = "pogscience.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": str(BASE_DIR / "db.sqlite3"),
     }
 }
 
@@ -121,6 +126,9 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+# Login with Twitch only, so we fallback all restricted pages to Twitch auth.
+LOGIN_URL = reverse_lazy("social:begin", args=["twitch"])
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -138,6 +146,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'dist/',  # must end with slash
+        'STATS_FILE': BASE_DIR / 'webpack-stats.json',
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    }
+}
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

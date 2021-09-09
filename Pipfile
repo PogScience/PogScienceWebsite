@@ -8,6 +8,11 @@ django = "*"
 django-debug-toolbar = "*"
 toml = "*"
 social-auth-app-django = "*"
+django-bulma-form-templates = "*"
+django-webpack-loader = "*"
+python-twitch-client = "*"
+pillow = "*"
+requests = "*"
 
 [dev-packages]
 

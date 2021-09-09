@@ -1,0 +1,157 @@
+{
+  "status": "done",
+  "assets": {
+    "main-9472b6440fbb2f0498f3.css": {
+      "name": "main-9472b6440fbb2f0498f3.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9472b6440fbb2f0498f3.css"
+    },
+    "main-9472b6440fbb2f0498f3.js": {
+      "name": "main-9472b6440fbb2f0498f3.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9472b6440fbb2f0498f3.js"
+    },
+    "main-87b74db42bf2efa65bc8.css": {
+      "name": "main-87b74db42bf2efa65bc8.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-87b74db42bf2efa65bc8.css"
+    },
+    "main-87b74db42bf2efa65bc8.js": {
+      "name": "main-87b74db42bf2efa65bc8.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-87b74db42bf2efa65bc8.js"
+    },
+    "main-de46549c36ca610308eb.css": {
+      "name": "main-de46549c36ca610308eb.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-de46549c36ca610308eb.css"
+    },
+    "main-de46549c36ca610308eb.js": {
+      "name": "main-de46549c36ca610308eb.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-de46549c36ca610308eb.js"
+    },
+    "main-ba65cf97d2a7cf7aa528.css": {
+      "name": "main-ba65cf97d2a7cf7aa528.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-ba65cf97d2a7cf7aa528.css"
+    },
+    "main-ba65cf97d2a7cf7aa528.js": {
+      "name": "main-ba65cf97d2a7cf7aa528.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-ba65cf97d2a7cf7aa528.js"
+    },
+    "main-27d82ec2cf401227cce8.css": {
+      "name": "main-27d82ec2cf401227cce8.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-27d82ec2cf401227cce8.css"
+    },
+    "main-27d82ec2cf401227cce8.js": {
+      "name": "main-27d82ec2cf401227cce8.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-27d82ec2cf401227cce8.js"
+    },
+    "main-a92319e90de0ac59a22d.css": {
+      "name": "main-a92319e90de0ac59a22d.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-a92319e90de0ac59a22d.css"
+    },
+    "main-a92319e90de0ac59a22d.js": {
+      "name": "main-a92319e90de0ac59a22d.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-a92319e90de0ac59a22d.js"
+    },
+    "main-c77eed8b9d679d65aa98.css": {
+      "name": "main-c77eed8b9d679d65aa98.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c77eed8b9d679d65aa98.css"
+    },
+    "main-c77eed8b9d679d65aa98.js": {
+      "name": "main-c77eed8b9d679d65aa98.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c77eed8b9d679d65aa98.js"
+    },
+    "main-18e60b6f4bae2e4babc2.css": {
+      "name": "main-18e60b6f4bae2e4babc2.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-18e60b6f4bae2e4babc2.css"
+    },
+    "main-18e60b6f4bae2e4babc2.js": {
+      "name": "main-18e60b6f4bae2e4babc2.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-18e60b6f4bae2e4babc2.js"
+    },
+    "main-f1ab3554f55b4b009d11.css": {
+      "name": "main-f1ab3554f55b4b009d11.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f1ab3554f55b4b009d11.css"
+    },
+    "main-f1ab3554f55b4b009d11.js": {
+      "name": "main-f1ab3554f55b4b009d11.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f1ab3554f55b4b009d11.js"
+    },
+    "main-053d58166732e2ad236e.css": {
+      "name": "main-053d58166732e2ad236e.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-053d58166732e2ad236e.css"
+    },
+    "main-053d58166732e2ad236e.js": {
+      "name": "main-053d58166732e2ad236e.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-053d58166732e2ad236e.js"
+    },
+    "main-9e3aeee8c1cd60ddbdf8.css": {
+      "name": "main-9e3aeee8c1cd60ddbdf8.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9e3aeee8c1cd60ddbdf8.css"
+    },
+    "main-9e3aeee8c1cd60ddbdf8.js": {
+      "name": "main-9e3aeee8c1cd60ddbdf8.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9e3aeee8c1cd60ddbdf8.js"
+    },
+    "main-b58612df40b1b637a8de.css": {
+      "name": "main-b58612df40b1b637a8de.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b58612df40b1b637a8de.css"
+    },
+    "main-b58612df40b1b637a8de.js": {
+      "name": "main-b58612df40b1b637a8de.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b58612df40b1b637a8de.js"
+    },
+    "main-58ebb70da2c8de28c121.css": {
+      "name": "main-58ebb70da2c8de28c121.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58ebb70da2c8de28c121.css"
+    },
+    "main-58ebb70da2c8de28c121.js": {
+      "name": "main-58ebb70da2c8de28c121.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58ebb70da2c8de28c121.js"
+    },
+    "main-828408d161a781ff893b.css": {
+      "name": "main-828408d161a781ff893b.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-828408d161a781ff893b.css"
+    },
+    "main-828408d161a781ff893b.js": {
+      "name": "main-828408d161a781ff893b.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-828408d161a781ff893b.js"
+    },
+    "main-0dbfa56162dd3c73595d.css": {
+      "name": "main-0dbfa56162dd3c73595d.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0dbfa56162dd3c73595d.css"
+    },
+    "main-0dbfa56162dd3c73595d.js": {
+      "name": "main-0dbfa56162dd3c73595d.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0dbfa56162dd3c73595d.js"
+    },
+    "main-578b705bf84864731d7f.css": {
+      "name": "main-578b705bf84864731d7f.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-578b705bf84864731d7f.css"
+    },
+    "main-578b705bf84864731d7f.js": {
+      "name": "main-578b705bf84864731d7f.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-578b705bf84864731d7f.js"
+    },
+    "main-703fbab34a04b2ce3a62.css": {
+      "name": "main-703fbab34a04b2ce3a62.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-703fbab34a04b2ce3a62.css"
+    },
+    "main-703fbab34a04b2ce3a62.js": {
+      "name": "main-703fbab34a04b2ce3a62.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-703fbab34a04b2ce3a62.js"
+    },
+    "main-d3a3ce5b645b5553f40c.css": {
+      "name": "main-d3a3ce5b645b5553f40c.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d3a3ce5b645b5553f40c.css"
+    },
+    "main-d3a3ce5b645b5553f40c.js": {
+      "name": "main-d3a3ce5b645b5553f40c.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d3a3ce5b645b5553f40c.js"
+    }
+  },
+  "chunks": {
+    "main": [
+      "main-d3a3ce5b645b5553f40c.css",
+      "main-d3a3ce5b645b5553f40c.js"
+    ]
+  },
+  "error": "ModuleBuildError",
+  "message": "Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Can't find stylesheet to import.\n   ╷\n42 │ @import \"sass/administration\";\n   │         ^^^^^^^^^^^^^^^^^^^^^\n   ╵\n  assets/index.scss 42:9  root stylesheet\n    at processResult (/home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:721:19)\n    at /home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:827:5\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:399:11\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:251:18\n    at context.callback (/home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at /home/amaury/Sites/pogscience/website/node_modules/sass-loader/dist/index.js:54:7\n    at Function.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:94141:16)\n    at _render_closure1.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:82396:12)\n    at _RootZone.runBinary$3$3 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:27693:18)\n    at _FutureListener.handleError$1 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:26242:19)"
+}
