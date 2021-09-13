@@ -4,7 +4,7 @@ from twitch import TwitchHelix
 _client = TwitchHelix(
     client_id=settings.SOCIAL_AUTH_TWITCH_KEY,
     client_secret=settings.SOCIAL_AUTH_TWITCH_SECRET,
-    scopes=[]
+    scopes=[],
 )
 
 

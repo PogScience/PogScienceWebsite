@@ -8,13 +8,19 @@ import streamers.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('streamers', '0003_default_streamers_live_to_false'),
+        ("streamers", "0003_default_streamers_live_to_false"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='streamer',
-            name='profile_image',
-            field=models.ImageField(blank=True, null=True, storage=pogscience.storage.OverwriteStorage(), upload_to=streamers.models.image_upload_to, verbose_name='Image de profil'),
+            model_name="streamer",
+            name="profile_image",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                storage=pogscience.storage.OverwriteStorage(),
+                upload_to=streamers.models.image_upload_to,
+                verbose_name="Image de profil",
+            ),
         ),
     ]

@@ -7,5 +7,5 @@ class HomeView(TemplateView):
     template_name = "home.html"
     extra_context = {
         "streamers": Streamer.objects.all(),
-        "live_streamers": list(Streamer.objects.filter(live=True))
+        "live_streamers": list(Streamer.objects.filter(live=True)),
     }

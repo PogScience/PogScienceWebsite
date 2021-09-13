@@ -22,7 +22,7 @@ import debug_toolbar
 
 urlpatterns = [
     path("", include("streamers.urls", namespace="streamers")),
-    path('', include('social_django.urls', namespace='social')),
+    path("", include("social_django.urls", namespace="social")),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
     path("admin/", include("administration.urls", namespace="administration")),
     path("admin/django/", admin.site.urls),
@@ -32,4 +32,5 @@ urlpatterns = [
 # Serves media in debug mode
 if settings.DEBUG:
     from django.conf.urls.static import static
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

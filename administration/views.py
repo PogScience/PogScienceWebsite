@@ -29,9 +29,7 @@ class StreamersView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
     model = Streamer
     context_object_name = "streamers"
 
-    extra_context = {
-        'add_streamers_form': AddStreamersForm()
-    }
+    extra_context = {"add_streamers_form": AddStreamersForm()}
 
     def get_template_names(self):
         return "streamers/list.partial.html" if self.partial else "streamers/list.html"
@@ -46,14 +44,20 @@ class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
     def form_valid(self, form):
         # Splits the names at whitespaces (including new lines) and filter out
         # empty strings left for multiple separators.
-        streamer_names = [name for name in re.split(r',|\s', form.cleaned_data['streamers_names'].strip()) if name]
+        streamer_names = [
+            name
+            for name in re.split(r",|\s", form.cleaned_data["streamers_names"].strip())
+            if name
+        ]
 
         streamers_twitch = get_twitch_client().get_users(streamer_names)
 
         with transaction.atomic():
             for streamer in streamers_twitch:
                 try:
-                    streamer_model: Streamer = Streamer.objects.get(twitch_login=streamer['login'])
+                    streamer_model: Streamer = Streamer.objects.get(
+                        twitch_login=streamer["login"]
+                    )
                 except Streamer.DoesNotExist:
                     streamer_model: Streamer = Streamer()
 
@@ -75,7 +79,7 @@ class UpdateStreamersFromTwitch(PermissionRequiredMixin, LoginRequiredMixin, Vie
         streamers_twitch = get_twitch_client().get_users(ids=ids)
 
         for streamer in streamers_twitch:
-            streamer_model = streamers[streamer['id']]
+            streamer_model = streamers[streamer["id"]]
             streamer_model.update_from_twitch_data(streamer)
             streamer_model.save()
 
