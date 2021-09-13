@@ -6,9 +6,9 @@
 <html lang="fr">
 
 <head itemscope>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta itemprop="csrfmiddlewaretoken" content="{{ csrf_token }}" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta itemprop="csrfmiddlewaretoken" content="{{ csrf_token }}"/>
 
     {% render_bundle 'main' 'css' is_preload=True %}
     {% render_bundle 'main' 'js' is_preload=True %}
@@ -21,43 +21,29 @@
 
 <body>
 {% block body %}
-    <nav class="navbar is-link is-spaced" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a href="{% url "streamers:home" %}" class="navbar-item">POG SCIENCE</a>
-        </div>
+    {% block content %}{% endblock %}
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start"></div>
-
-            <div class="navbar-end">
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
                 {% if request.user.is_anonymous %}
                     {% if twitch.enabled %}
-                        <div class="navbar-item">
-                            <div class="buttons">
-                                <a class="button is-link is-light" href="{% url "social:begin" "twitch" %}">
-                                    Se connecter avec Twitch
-                                </a>
-                            </div>
-                        </div>
+                        <a href="{% url "social:begin" "twitch" %}">
+                            Se connecter avec Twitch
+                        </a>
                     {% endif %}
                 {% else %}
-                    <div class="navbar-item">{{ request.user.first_name }}</div>
-                    <div class="navbar-item">
-                        <div class="buttons">
-                            <a class="button is-primary is-light" href="{% url "administration:index" %}">
-                                Administration
-                            </a>
-                            <a class="button is-ghost is-light" href="{% url "logout" %}">
-                                Déconnexion
-                            </a>
-                        </div>
-                    </div>
+                    {{ request.user.first_name }} &centerdot;
+                    <a href="{% url "administration:index" %}">
+                        Administration
+                    </a> &centerdot;
+                    <a href="{% url "logout" %}">
+                        Déconnexion
+                    </a>
                 {% endif %}
-            </div>
+            </p>
         </div>
-    </nav>
-
-    {% block content %}{% endblock %}
+    </footer>
 {% endblock %}
 
 {% render_bundle 'main' 'js' %}

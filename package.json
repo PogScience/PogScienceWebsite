@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "PogScience website",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@creativebulma/bulma-divider": "^1.1.0"
+  },
   "devDependencies": {
     "bulma": "^0.9.3",
     "css-loader": "^6.2.0",

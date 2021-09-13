@@ -3,22 +3,107 @@
 {% load i18n %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <h1 class="title">{% trans "Qui ?" %}</h1>
-        <p class="subtitle">
-            {% blocktrans count count=streamers|length %}
-                {{ count }} streamer
-            {% plural %}
-                {{ count }} streamers
-            {% endblocktrans %}
-        </p>
+    <section class="hero is-medium is-primary">
+        <div class="hero-body">
+            <div class="container">
+                <p class="title">
+                    POGSCIENCE
+                </p>
+                <p class="subtitle">
+                    le pog kilébi1 et qui n'arrache pas du tout les yeux avec cette
+                    couleur agressive sérieux faudra vraiment reprendre ça avec le
+                    graphiste en plus c'est la rentrée étou là y'a moyen de faire
+                    des trucs ça va être bien bref<br/>
+                    en plus on pourra mettre une sorte de réseau avec tous les
+                    streamers affiché dynamiquement ça va être beau étou allez
+                    là<br/>
+                    vous connaissez pogscience ?
+                </p>
+            </div>
+        </div>
+    </section>
 
-        <ul>
-            {% for streamer in streamers %}
-                <li>{{ streamer.name }} ({{ streamer.twitch_login }})</li>
-            {% endfor %}
-        </ul>
-    </div>
-</section>
+    {# if il y a ou des streamers en live ou des événements à venir #}
+    {# S'il n'y a personne en live et rien à venir, inutile d'afficher quoique ce soit #}
+    <section class="section right-now">
+        <div class="container">
+            <header>
+                <div class="titles">
+                    {% if live_streamers|length_is:"1" %}
+                        {% with streamer=live_streamers|first %}
+                            <h2 class="title">{{ streamer.name }} est en live !</h2>
+                            <p class="subtitle">Rejoignez 84 spectateurs sur {{ streamer.live_game_name }}</p>
+                        {% endwith %}
+                    {% elif live_streamers|length %}
+                        <h2 class="title">Il y a {{ live_streamers|length }} en live !</h2>
+                        <p class="subtitle">Rejoignez 84 spectateurs sur {{ streamer.live_game_name }}</p>
+                    {% else %}
+                        <h2 class="title">Personne n'est en live pour le moment…</h2>
+                        <p class="subtitle">…mais de nouveaux streams arrivent&nbsp;!</p>
+                    {% endif %}
+                </div>
+                <aside>
+                    <p>
+                        <a href="#" class="button is-outlined is-white">
+                            <span>{% trans "Tout le calendrier" %}</span>
+                            <span class="icon is-small">
+                          <span class="fas fa-angle-right"></span>
+                        </span>
+                        </a>
+                    </p>
+                    <p class="is-timezone">{% trans "Heures de Paris (UTC+2)" %}</p>
+                </aside>
+            </header>
+
+            {% if live_streamers|length_is:"1" %}
+                <article class="box live-stream is-solo">
+                    <figure>
+                        <a href="https://twitch.tv/professeurklotho">
+                            <img src="/media/twitch/profile/professeurklotho.png" alt="dassaju"/>
+                        </a>
+                    </figure>
+                    <a href="https://twitch.tv/professeurklotho" class="stream-box-content">
+                        <h3>Mythes et légendes par le duo improbable ! Avec LeGonfleurdHelice</h3>
+                        <p class="game"><span class="streamer-name">ProfesseurKlotho</span> &centerdot; Discussion &centerdot; 104 spectateurs</p>
+
+                        <footer>
+                            <time datetime="2021-07-07T20:00:00+02:00"><span class="tag is-danger">EN DIRECT</span> jusqu'à 11h00</time>
+                            <span class="fab fa-twitch"></span>
+                        </footer>
+                    </a>
+                </article>
+            {% else %}
+
+            {% endif %}
+
+            {% if live_streamers %}
+                <div class="divider">{% trans "Mais aussi, bientôt sur Twitch" %}</div>
+            {% endif %}
+
+            <div class="columns">
+                {% for i in '01'|make_list %}
+                    <div class="column is-6">
+                        <article class="box scheduled-stream">
+                            <figure>
+                                <a href="https://twitch.tv/dassaju">
+                                    <img src="/media/twitch/profile/dassaju.png" alt="dassaju"/>
+                                </a>
+                            </figure>
+                            <a href="https://twitch.tv/dassaju" class="stream-box-content">
+                                <h3>Le Café Croiscience, votre matinale d'actualité scientifique !</h3>
+                                <p class="game"><span class="streamer-name">dassaju</span> &centerdot; Sciences et
+                                    technologie</p>
+
+                                <footer>
+                                    <time datetime="2021-07-07T20:00:00+02:00">Dans deux heures, à 8h30</time>
+                                    <span class="fab fa-twitch"></span>
+                                </footer>
+                            </a>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {# endif #}
 {% endblock %}

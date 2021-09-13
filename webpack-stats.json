@@ -1,325 +1,189 @@
 {
   "status": "done",
   "assets": {
-    "main-9472b6440fbb2f0498f3.css": {
-      "name": "main-9472b6440fbb2f0498f3.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9472b6440fbb2f0498f3.css"
-    },
-    "main-9472b6440fbb2f0498f3.js": {
-      "name": "main-9472b6440fbb2f0498f3.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9472b6440fbb2f0498f3.js"
-    },
-    "main-87b74db42bf2efa65bc8.css": {
-      "name": "main-87b74db42bf2efa65bc8.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-87b74db42bf2efa65bc8.css"
-    },
-    "main-87b74db42bf2efa65bc8.js": {
-      "name": "main-87b74db42bf2efa65bc8.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-87b74db42bf2efa65bc8.js"
-    },
-    "main-de46549c36ca610308eb.css": {
-      "name": "main-de46549c36ca610308eb.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-de46549c36ca610308eb.css"
-    },
-    "main-de46549c36ca610308eb.js": {
-      "name": "main-de46549c36ca610308eb.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-de46549c36ca610308eb.js"
-    },
-    "main-ba65cf97d2a7cf7aa528.css": {
-      "name": "main-ba65cf97d2a7cf7aa528.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-ba65cf97d2a7cf7aa528.css"
-    },
-    "main-ba65cf97d2a7cf7aa528.js": {
-      "name": "main-ba65cf97d2a7cf7aa528.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-ba65cf97d2a7cf7aa528.js"
-    },
-    "main-27d82ec2cf401227cce8.css": {
-      "name": "main-27d82ec2cf401227cce8.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-27d82ec2cf401227cce8.css"
-    },
-    "main-27d82ec2cf401227cce8.js": {
-      "name": "main-27d82ec2cf401227cce8.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-27d82ec2cf401227cce8.js"
-    },
-    "main-a92319e90de0ac59a22d.css": {
-      "name": "main-a92319e90de0ac59a22d.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-a92319e90de0ac59a22d.css"
-    },
-    "main-a92319e90de0ac59a22d.js": {
-      "name": "main-a92319e90de0ac59a22d.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-a92319e90de0ac59a22d.js"
-    },
-    "main-c77eed8b9d679d65aa98.css": {
-      "name": "main-c77eed8b9d679d65aa98.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c77eed8b9d679d65aa98.css"
-    },
-    "main-c77eed8b9d679d65aa98.js": {
-      "name": "main-c77eed8b9d679d65aa98.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c77eed8b9d679d65aa98.js"
-    },
-    "main-18e60b6f4bae2e4babc2.css": {
-      "name": "main-18e60b6f4bae2e4babc2.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-18e60b6f4bae2e4babc2.css"
-    },
-    "main-18e60b6f4bae2e4babc2.js": {
-      "name": "main-18e60b6f4bae2e4babc2.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-18e60b6f4bae2e4babc2.js"
-    },
-    "main-f1ab3554f55b4b009d11.css": {
-      "name": "main-f1ab3554f55b4b009d11.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f1ab3554f55b4b009d11.css"
-    },
-    "main-f1ab3554f55b4b009d11.js": {
-      "name": "main-f1ab3554f55b4b009d11.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f1ab3554f55b4b009d11.js"
-    },
-    "main-053d58166732e2ad236e.css": {
-      "name": "main-053d58166732e2ad236e.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-053d58166732e2ad236e.css"
-    },
-    "main-053d58166732e2ad236e.js": {
-      "name": "main-053d58166732e2ad236e.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-053d58166732e2ad236e.js"
-    },
-    "main-9e3aeee8c1cd60ddbdf8.css": {
-      "name": "main-9e3aeee8c1cd60ddbdf8.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9e3aeee8c1cd60ddbdf8.css"
-    },
-    "main-9e3aeee8c1cd60ddbdf8.js": {
-      "name": "main-9e3aeee8c1cd60ddbdf8.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-9e3aeee8c1cd60ddbdf8.js"
-    },
-    "main-b58612df40b1b637a8de.css": {
-      "name": "main-b58612df40b1b637a8de.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b58612df40b1b637a8de.css"
-    },
-    "main-b58612df40b1b637a8de.js": {
-      "name": "main-b58612df40b1b637a8de.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b58612df40b1b637a8de.js"
-    },
-    "main-58ebb70da2c8de28c121.css": {
-      "name": "main-58ebb70da2c8de28c121.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58ebb70da2c8de28c121.css"
-    },
-    "main-58ebb70da2c8de28c121.js": {
-      "name": "main-58ebb70da2c8de28c121.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58ebb70da2c8de28c121.js"
-    },
-    "main-828408d161a781ff893b.css": {
-      "name": "main-828408d161a781ff893b.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-828408d161a781ff893b.css"
-    },
-    "main-828408d161a781ff893b.js": {
-      "name": "main-828408d161a781ff893b.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-828408d161a781ff893b.js"
-    },
-    "main-0dbfa56162dd3c73595d.css": {
-      "name": "main-0dbfa56162dd3c73595d.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0dbfa56162dd3c73595d.css"
-    },
-    "main-0dbfa56162dd3c73595d.js": {
-      "name": "main-0dbfa56162dd3c73595d.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0dbfa56162dd3c73595d.js"
-    },
-    "main-578b705bf84864731d7f.css": {
-      "name": "main-578b705bf84864731d7f.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-578b705bf84864731d7f.css"
-    },
-    "main-578b705bf84864731d7f.js": {
-      "name": "main-578b705bf84864731d7f.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-578b705bf84864731d7f.js"
-    },
-    "main-703fbab34a04b2ce3a62.css": {
-      "name": "main-703fbab34a04b2ce3a62.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-703fbab34a04b2ce3a62.css"
-    },
-    "main-703fbab34a04b2ce3a62.js": {
-      "name": "main-703fbab34a04b2ce3a62.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-703fbab34a04b2ce3a62.js"
-    },
-    "main-d3a3ce5b645b5553f40c.css": {
-      "name": "main-d3a3ce5b645b5553f40c.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d3a3ce5b645b5553f40c.css"
-    },
-    "main-d3a3ce5b645b5553f40c.js": {
-      "name": "main-d3a3ce5b645b5553f40c.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d3a3ce5b645b5553f40c.js"
-    },
-    "main-f0fe79b3817f8eb8e5c2.css": {
-      "name": "main-f0fe79b3817f8eb8e5c2.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f0fe79b3817f8eb8e5c2.css"
-    },
-    "main-f0fe79b3817f8eb8e5c2.js": {
-      "name": "main-f0fe79b3817f8eb8e5c2.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f0fe79b3817f8eb8e5c2.js"
-    },
-    "main-2f62fa49f39dab41245b.css": {
-      "name": "main-2f62fa49f39dab41245b.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2f62fa49f39dab41245b.css"
-    },
-    "main-2f62fa49f39dab41245b.js": {
-      "name": "main-2f62fa49f39dab41245b.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2f62fa49f39dab41245b.js"
-    },
-    "main-965a21605cc6e986de0f.css": {
-      "name": "main-965a21605cc6e986de0f.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-965a21605cc6e986de0f.css"
-    },
-    "main-965a21605cc6e986de0f.js": {
-      "name": "main-965a21605cc6e986de0f.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-965a21605cc6e986de0f.js"
-    },
-    "main-58a29e7dc0ef6d03b7c6.css": {
-      "name": "main-58a29e7dc0ef6d03b7c6.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58a29e7dc0ef6d03b7c6.css"
-    },
-    "main-58a29e7dc0ef6d03b7c6.js": {
-      "name": "main-58a29e7dc0ef6d03b7c6.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-58a29e7dc0ef6d03b7c6.js"
-    },
-    "main-e267268647e5a9e4da6d.css": {
-      "name": "main-e267268647e5a9e4da6d.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-e267268647e5a9e4da6d.css"
-    },
-    "main-e267268647e5a9e4da6d.js": {
-      "name": "main-e267268647e5a9e4da6d.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-e267268647e5a9e4da6d.js"
-    },
-    "main-746bbb67d937078f87e9.css": {
-      "name": "main-746bbb67d937078f87e9.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-746bbb67d937078f87e9.css"
-    },
-    "main-746bbb67d937078f87e9.js": {
-      "name": "main-746bbb67d937078f87e9.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-746bbb67d937078f87e9.js"
-    },
-    "main-7df61a52946b07e2c118.css": {
-      "name": "main-7df61a52946b07e2c118.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-7df61a52946b07e2c118.css"
-    },
-    "main-7df61a52946b07e2c118.js": {
-      "name": "main-7df61a52946b07e2c118.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-7df61a52946b07e2c118.js"
-    },
-    "main-e3c27077466b427e788b.css": {
-      "name": "main-e3c27077466b427e788b.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-e3c27077466b427e788b.css"
-    },
-    "main-e3c27077466b427e788b.js": {
-      "name": "main-e3c27077466b427e788b.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-e3c27077466b427e788b.js"
-    },
-    "main-b308b8505b2371e3f389.css": {
-      "name": "main-b308b8505b2371e3f389.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b308b8505b2371e3f389.css"
-    },
-    "main-b308b8505b2371e3f389.js": {
-      "name": "main-b308b8505b2371e3f389.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b308b8505b2371e3f389.js"
-    },
-    "main-0636304fa7473381da9a.css": {
-      "name": "main-0636304fa7473381da9a.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0636304fa7473381da9a.css"
-    },
-    "main-0636304fa7473381da9a.js": {
-      "name": "main-0636304fa7473381da9a.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0636304fa7473381da9a.js"
-    },
-    "main-3a53bd68170bd18d11a6.css": {
-      "name": "main-3a53bd68170bd18d11a6.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-3a53bd68170bd18d11a6.css"
-    },
-    "main-3a53bd68170bd18d11a6.js": {
-      "name": "main-3a53bd68170bd18d11a6.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-3a53bd68170bd18d11a6.js"
-    },
-    "main-d92a05eea496215ef135.css": {
-      "name": "main-d92a05eea496215ef135.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d92a05eea496215ef135.css"
-    },
-    "main-d92a05eea496215ef135.js": {
-      "name": "main-d92a05eea496215ef135.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d92a05eea496215ef135.js"
-    },
-    "main-8ca0b5ef96f1873a05bc.css": {
-      "name": "main-8ca0b5ef96f1873a05bc.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-8ca0b5ef96f1873a05bc.css"
-    },
-    "main-8ca0b5ef96f1873a05bc.js": {
-      "name": "main-8ca0b5ef96f1873a05bc.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-8ca0b5ef96f1873a05bc.js"
-    },
-    "main-4b8fce4c79480ba33946.css": {
-      "name": "main-4b8fce4c79480ba33946.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4b8fce4c79480ba33946.css"
-    },
-    "main-4b8fce4c79480ba33946.js": {
-      "name": "main-4b8fce4c79480ba33946.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4b8fce4c79480ba33946.js"
-    },
-    "main-0fcd81b85458ec55adca.css": {
-      "name": "main-0fcd81b85458ec55adca.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0fcd81b85458ec55adca.css"
-    },
-    "main-0fcd81b85458ec55adca.js": {
-      "name": "main-0fcd81b85458ec55adca.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-0fcd81b85458ec55adca.js"
-    },
-    "main-53ed883d6f679bf2048c.css": {
-      "name": "main-53ed883d6f679bf2048c.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-53ed883d6f679bf2048c.css"
-    },
-    "main-53ed883d6f679bf2048c.js": {
-      "name": "main-53ed883d6f679bf2048c.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-53ed883d6f679bf2048c.js"
-    },
-    "main-f4d687b0bc050af23bdf.css": {
-      "name": "main-f4d687b0bc050af23bdf.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f4d687b0bc050af23bdf.css"
-    },
-    "main-f4d687b0bc050af23bdf.js": {
-      "name": "main-f4d687b0bc050af23bdf.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f4d687b0bc050af23bdf.js"
-    },
-    "main-379feac9d1908bb555f9.css": {
-      "name": "main-379feac9d1908bb555f9.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-379feac9d1908bb555f9.css"
-    },
-    "main-379feac9d1908bb555f9.js": {
-      "name": "main-379feac9d1908bb555f9.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-379feac9d1908bb555f9.js"
-    },
-    "main-b0a0f60a8a58b912ed87.css": {
-      "name": "main-b0a0f60a8a58b912ed87.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b0a0f60a8a58b912ed87.css"
-    },
-    "main-b0a0f60a8a58b912ed87.js": {
-      "name": "main-b0a0f60a8a58b912ed87.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b0a0f60a8a58b912ed87.js"
-    },
-    "main-4bfe88b69c0c2720f7e7.css": {
-      "name": "main-4bfe88b69c0c2720f7e7.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4bfe88b69c0c2720f7e7.css"
-    },
-    "main-4bfe88b69c0c2720f7e7.js": {
-      "name": "main-4bfe88b69c0c2720f7e7.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4bfe88b69c0c2720f7e7.js"
-    },
-    "main-f17420746cb5fa77ca5e.css": {
-      "name": "main-f17420746cb5fa77ca5e.css",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f17420746cb5fa77ca5e.css"
-    },
-    "main-f17420746cb5fa77ca5e.js": {
-      "name": "main-f17420746cb5fa77ca5e.js",
-      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f17420746cb5fa77ca5e.js"
+    "main-b3498aa56912156a3718.css": {
+      "name": "main-b3498aa56912156a3718.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b3498aa56912156a3718.css"
+    },
+    "main-b3498aa56912156a3718.js": {
+      "name": "main-b3498aa56912156a3718.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b3498aa56912156a3718.js"
+    },
+    "main-4a93395a0c031c4d27b9.css": {
+      "name": "main-4a93395a0c031c4d27b9.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4a93395a0c031c4d27b9.css"
+    },
+    "main-4a93395a0c031c4d27b9.js": {
+      "name": "main-4a93395a0c031c4d27b9.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-4a93395a0c031c4d27b9.js"
+    },
+    "main-5ec9d8d2c948ea6d4f5b.css": {
+      "name": "main-5ec9d8d2c948ea6d4f5b.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-5ec9d8d2c948ea6d4f5b.css"
+    },
+    "main-5ec9d8d2c948ea6d4f5b.js": {
+      "name": "main-5ec9d8d2c948ea6d4f5b.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-5ec9d8d2c948ea6d4f5b.js"
+    },
+    "main-2c81c30d0cca208878a5.css": {
+      "name": "main-2c81c30d0cca208878a5.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2c81c30d0cca208878a5.css"
+    },
+    "main-2c81c30d0cca208878a5.js": {
+      "name": "main-2c81c30d0cca208878a5.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2c81c30d0cca208878a5.js"
+    },
+    "main-cee9c4dec9cef56bd750.css": {
+      "name": "main-cee9c4dec9cef56bd750.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-cee9c4dec9cef56bd750.css"
+    },
+    "main-cee9c4dec9cef56bd750.js": {
+      "name": "main-cee9c4dec9cef56bd750.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-cee9c4dec9cef56bd750.js"
+    },
+    "main-f30828632644d571d185.css": {
+      "name": "main-f30828632644d571d185.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f30828632644d571d185.css"
+    },
+    "main-f30828632644d571d185.js": {
+      "name": "main-f30828632644d571d185.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f30828632644d571d185.js"
+    },
+    "main-8cae93194362f502cb59.css": {
+      "name": "main-8cae93194362f502cb59.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-8cae93194362f502cb59.css"
+    },
+    "main-8cae93194362f502cb59.js": {
+      "name": "main-8cae93194362f502cb59.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-8cae93194362f502cb59.js"
+    },
+    "main-2b1254c6ee49d173e52d.css": {
+      "name": "main-2b1254c6ee49d173e52d.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2b1254c6ee49d173e52d.css"
+    },
+    "main-2b1254c6ee49d173e52d.js": {
+      "name": "main-2b1254c6ee49d173e52d.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-2b1254c6ee49d173e52d.js"
+    },
+    "main-f6cc0bc8cd955659cf74.css": {
+      "name": "main-f6cc0bc8cd955659cf74.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f6cc0bc8cd955659cf74.css"
+    },
+    "main-f6cc0bc8cd955659cf74.js": {
+      "name": "main-f6cc0bc8cd955659cf74.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f6cc0bc8cd955659cf74.js"
+    },
+    "main-44747bf812c50f9d0804.css": {
+      "name": "main-44747bf812c50f9d0804.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-44747bf812c50f9d0804.css"
+    },
+    "main-44747bf812c50f9d0804.js": {
+      "name": "main-44747bf812c50f9d0804.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-44747bf812c50f9d0804.js"
+    },
+    "main-dc44571deae2ae8393be.css": {
+      "name": "main-dc44571deae2ae8393be.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-dc44571deae2ae8393be.css"
+    },
+    "main-dc44571deae2ae8393be.js": {
+      "name": "main-dc44571deae2ae8393be.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-dc44571deae2ae8393be.js"
+    },
+    "main-f7108b41b770d2b2f6b5.css": {
+      "name": "main-f7108b41b770d2b2f6b5.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f7108b41b770d2b2f6b5.css"
+    },
+    "main-f7108b41b770d2b2f6b5.js": {
+      "name": "main-f7108b41b770d2b2f6b5.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f7108b41b770d2b2f6b5.js"
+    },
+    "main-76f854e7d7e8b32f5a15.css": {
+      "name": "main-76f854e7d7e8b32f5a15.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-76f854e7d7e8b32f5a15.css"
+    },
+    "main-76f854e7d7e8b32f5a15.js": {
+      "name": "main-76f854e7d7e8b32f5a15.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-76f854e7d7e8b32f5a15.js"
+    },
+    "main-b9b0e145d95047835d54.css": {
+      "name": "main-b9b0e145d95047835d54.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b9b0e145d95047835d54.css"
+    },
+    "main-b9b0e145d95047835d54.js": {
+      "name": "main-b9b0e145d95047835d54.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-b9b0e145d95047835d54.js"
+    },
+    "main-6796ec469db7f55588c5.css": {
+      "name": "main-6796ec469db7f55588c5.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-6796ec469db7f55588c5.css"
+    },
+    "main-6796ec469db7f55588c5.js": {
+      "name": "main-6796ec469db7f55588c5.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-6796ec469db7f55588c5.js"
+    },
+    "main-f40e45edaf1f21510d5e.css": {
+      "name": "main-f40e45edaf1f21510d5e.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f40e45edaf1f21510d5e.css"
+    },
+    "main-f40e45edaf1f21510d5e.js": {
+      "name": "main-f40e45edaf1f21510d5e.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-f40e45edaf1f21510d5e.js"
+    },
+    "main-68192de8a5e9a4b3e932.css": {
+      "name": "main-68192de8a5e9a4b3e932.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-68192de8a5e9a4b3e932.css"
+    },
+    "main-68192de8a5e9a4b3e932.js": {
+      "name": "main-68192de8a5e9a4b3e932.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-68192de8a5e9a4b3e932.js"
+    },
+    "main-badab1cd39a9830d4529.css": {
+      "name": "main-badab1cd39a9830d4529.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-badab1cd39a9830d4529.css"
+    },
+    "main-badab1cd39a9830d4529.js": {
+      "name": "main-badab1cd39a9830d4529.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-badab1cd39a9830d4529.js"
+    },
+    "main-524a74a0a968cebe677a.css": {
+      "name": "main-524a74a0a968cebe677a.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-524a74a0a968cebe677a.css"
+    },
+    "main-524a74a0a968cebe677a.js": {
+      "name": "main-524a74a0a968cebe677a.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-524a74a0a968cebe677a.js"
+    },
+    "main-c8c0c9f0bca2c46680b2.css": {
+      "name": "main-c8c0c9f0bca2c46680b2.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c8c0c9f0bca2c46680b2.css"
+    },
+    "main-c8c0c9f0bca2c46680b2.js": {
+      "name": "main-c8c0c9f0bca2c46680b2.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-c8c0c9f0bca2c46680b2.js"
+    },
+    "main-d55e0a43c419232d2b4f.css": {
+      "name": "main-d55e0a43c419232d2b4f.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d55e0a43c419232d2b4f.css"
+    },
+    "main-d55e0a43c419232d2b4f.js": {
+      "name": "main-d55e0a43c419232d2b4f.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-d55e0a43c419232d2b4f.js"
+    },
+    "main-840902fee064a6eb48e1.css": {
+      "name": "main-840902fee064a6eb48e1.css",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-840902fee064a6eb48e1.css"
+    },
+    "main-840902fee064a6eb48e1.js": {
+      "name": "main-840902fee064a6eb48e1.js",
+      "path": "/home/amaury/Sites/pogscience/website/static/dist/main-840902fee064a6eb48e1.js"
     }
   },
   "chunks": {
     "main": [
-      "main-f17420746cb5fa77ca5e.css",
-      "main-f17420746cb5fa77ca5e.js"
+      "main-840902fee064a6eb48e1.css",
+      "main-840902fee064a6eb48e1.js"
     ]
   },
   "error": "ModuleBuildError",
-  "message": "Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Can't find stylesheet to import.\n   ╷\n42 │ @import \"sass/administration\";\n   │         ^^^^^^^^^^^^^^^^^^^^^\n   ╵\n  assets/index.scss 42:9  root stylesheet\n    at processResult (/home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:721:19)\n    at /home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:827:5\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:399:11\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:251:18\n    at context.callback (/home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at /home/amaury/Sites/pogscience/website/node_modules/sass-loader/dist/index.js:54:7\n    at Function.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:94141:16)\n    at _render_closure1.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:82396:12)\n    at _RootZone.runBinary$3$3 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:27693:18)\n    at _FutureListener.handleError$1 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:26242:19)"
+  "message": "Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: $n: Invalid index 2 for a list with 1 elements.\n   ╷\n39 │             $color-invert: nth($components, 2)\n   │                            ^^^^^^^^^^^^^^^^^^^\n   ╵\n  node_modules/bulma/sass/utilities/functions.sass 39:28           mergeColorMaps()\n  node_modules/bulma/sass/utilities/derived-variables.sass 110:10  @import\n  node_modules/bulma/sass/utilities/_all.sass 6:9                  @import\n  assets/index.scss 29:9                                           root stylesheet\n    at processResult (/home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:721:19)\n    at /home/amaury/Sites/pogscience/website/node_modules/webpack/lib/NormalModule.js:827:5\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:399:11\n    at /home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:251:18\n    at context.callback (/home/amaury/Sites/pogscience/website/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at /home/amaury/Sites/pogscience/website/node_modules/sass-loader/dist/index.js:54:7\n    at Function.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:94141:16)\n    at _render_closure1.call$2 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:82396:12)\n    at _RootZone.runBinary$3$3 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:27693:18)\n    at _FutureListener.handleError$1 (/home/amaury/Sites/pogscience/website/node_modules/sass/sass.dart.js:26242:19)"
 }
