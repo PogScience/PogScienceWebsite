@@ -44,20 +44,14 @@ class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
     def form_valid(self, form):
         # Splits the names at whitespaces (including new lines) and filter out
         # empty strings left for multiple separators.
-        streamer_names = [
-            name
-            for name in re.split(r",|\s", form.cleaned_data["streamers_names"].strip())
-            if name
-        ]
+        streamer_names = [name for name in re.split(r",|\s", form.cleaned_data["streamers_names"].strip()) if name]
 
         streamers_twitch = get_twitch_client().get_users(streamer_names)
 
         with transaction.atomic():
             for streamer in streamers_twitch:
                 try:
-                    streamer_model: Streamer = Streamer.objects.get(
-                        twitch_login=streamer["login"]
-                    )
+                    streamer_model: Streamer = Streamer.objects.get(twitch_login=streamer["login"])
                 except Streamer.DoesNotExist:
                     streamer_model: Streamer = Streamer()
 

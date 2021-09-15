@@ -2,6 +2,7 @@ import os
 from io import BytesIO
 
 import requests
+from django.contrib import admin
 from django.core import files
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -19,17 +20,19 @@ def image_upload_to(folder):
     Generates a function returning the filename to use for a streamer profile
     picture, or background image, or other. The image will be named against the
     streamer, in the given folder.
-    
-    :param folder: The folder where to store the image. 
+
+    :param folder: The folder where to store the image.
     :return: A function for Django FileField's upload_to.
     """
+
     def _inner(instance, filename: str):
         """
         Used by Django, returns the filename to use for the streamers' profile
         pictures.
         """
         _, ext = os.path.splitext(filename)
-        return f'twitch/{folder}/{instance.twitch_login}{ext}'
+        return f"twitch/{folder}/{instance.twitch_login}{ext}"
+
     return _inner
 
 
@@ -43,7 +46,7 @@ def background_image_upload_to(*args, **kwargs):
 
 class Streamer(models.Model):
     class Meta:
-        ordering = ['name', 'twitch_login']
+        ordering = ["name", "twitch_login"]
 
     user = models.OneToOneField(
         User,
@@ -64,22 +67,16 @@ class Streamer(models.Model):
         max_length=64,
         help_text=_("Utilisé pour récupérer les informations automatiquement"),
     )
-    twitch_id = models.PositiveBigIntegerField(
-        verbose_name=_("L'identifiant numérique Twitch")
-    )
+    twitch_id = models.PositiveBigIntegerField(verbose_name=_("L'identifiant numérique Twitch"))
     description = models.CharField(
         verbose_name=_("Courte description"),
         max_length=512,
-        help_text=_(
-            "Une courte description affichée par exemple sur la page d'accueil"
-        ),
+        help_text=_("Une courte description affichée par exemple sur la page d'accueil"),
         blank=True,
     )
     long_description = models.TextField(
         verbose_name=_("Longue description"),
-        help_text=_(
-            "Description potentiellement très longue affichée sur la page du streamer ou de la streameuse"
-        ),
+        help_text=_("Description potentiellement très longue affichée sur la page du streamer ou de la streameuse"),
         blank=True,
     )
     profile_image = models.ImageField(
@@ -87,20 +84,20 @@ class Streamer(models.Model):
         storage=OverwriteStorage(),
         upload_to=profile_image_upload_to,
         null=True,
-        blank=True
+        blank=True,
     )
     background_image = models.ImageField(
         verbose_name=_("Image de fond"),
         storage=OverwriteStorage(),
         upload_to=background_image_upload_to,
         null=True,
-        blank=True
+        blank=True,
     )
 
     live = models.BooleanField(
         verbose_name=_("Est en live actuellement"),
         help_text=_("Est-iel en live actuellement ? Mis à jour automatiquement"),
-        default=False
+        default=False,
     )
     live_title = models.CharField(
         verbose_name=_("Titre du live"),
@@ -108,9 +105,7 @@ class Streamer(models.Model):
         blank=True,
         null=True,
         default=None,
-        help_text=_(
-            "Le titre du live en cours, récupéré automatiquement depuis Twitch"
-        ),
+        help_text=_("Le titre du live en cours, récupéré automatiquement depuis Twitch"),
     )
     live_game_name = models.CharField(
         verbose_name=_("Catégorie du stream"),
@@ -118,13 +113,11 @@ class Streamer(models.Model):
         blank=True,
         null=True,
         default=None,
-        help_text=_(
-            "La catégorie du live en cours, récupéré automatiquement depuis Twitch"
-        ),
+        help_text=_("La catégorie du live en cours, récupéré automatiquement depuis Twitch"),
     )
 
     def __str__(self):
-        return f"{self.name} – @{self.twitch_login}"
+        return self.name
 
     def update_from_twitch_data(self, twitch_data):
         """
@@ -150,8 +143,46 @@ class Streamer(models.Model):
 
             image = BytesIO()
             image.write(res_image.content)
-            filename = f'image{os.path.splitext(twitch_data[key])[1]}'
+            filename = f"image{os.path.splitext(twitch_data[key])[1]}"
             field.save(filename, files.File(image))
 
         _download_and_store_image("profile_image_url", self.profile_image)
         _download_and_store_image("offline_image_url", self.background_image)
+
+
+class ScheduledStream(models.Model):
+    streamer = models.ForeignKey(
+        Streamer,
+        verbose_name=_("streamer ayant programmé le stream"),
+        related_name="schedule",
+        on_delete=models.CASCADE,
+    )
+
+    title = models.CharField(_("titre du stream programmé"), max_length=140)
+
+    start = models.DateTimeField(_("heure de début prévue"))
+    end = models.DateTimeField(_("heure de fin prévue"))
+
+    category = models.CharField(_("catégorie du stream"), max_length=140, blank=True, null=True)
+
+    weekly = models.BooleanField(_("hebdomadaire ?"))
+
+    twitch_segment_id = models.CharField(
+        _("identifiant interne du segment Twitch"),
+        max_length=128,
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
+    google_calendar_event_id = models.CharField(
+        _("identifiant interne de l'événement Google Calendar"), max_length=128, null=True, blank=True, editable=False
+    )
+
+    @property
+    @admin.display(description=_("Durée"))
+    def duration(self):
+        return self.end - self.start
+
+    def __str__(self):
+        return f"{self.title} ({self.streamer}, {self.start} → {self.end})"

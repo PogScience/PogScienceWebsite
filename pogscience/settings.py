@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+from datetime import timedelta
+
 import toml
 from pathlib import Path
 
@@ -208,3 +210,9 @@ SOCIAL_AUTH_PIPELINE = (
     # Associates a Streamer record to the user, if any
     "streamers.pipeline.associate_streamer",
 )
+
+POG_SCHEDULE = {
+    "FETCH_UNTIL": timedelta(days=180),
+    "GOOGLE_CALENDAR_ID": secrets["google"].get("calendar_id"),
+    "GOOGLE_API_KEY": secrets["google"].get("api_key"),
+}

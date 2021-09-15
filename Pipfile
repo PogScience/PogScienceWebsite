@@ -13,6 +13,10 @@ django-webpack-loader = "*"
 python-twitch-client = "*"
 pillow = "*"
 requests = "*"
+pytz = "*"
+python-dateutil = "*"
+django-click = "*"
+google-api-python-client = "*"
 
 [dev-packages]
 
