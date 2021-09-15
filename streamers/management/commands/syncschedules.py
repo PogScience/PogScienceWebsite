@@ -6,6 +6,8 @@ from pprint import pprint
 import dateutil.parser as dp
 import djclick as click
 from django.conf import settings
+from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 from googleapiclient import discovery
 from requests import HTTPError
@@ -249,86 +251,104 @@ def command(reset):
 
     click.echo(f"{len(twitch_events)} scheduled streams loaded from both sources, after merge.\n")
 
-    if reset:
-        click.echo("Removing existing scheduled streams…")
-        ScheduledStream.objects.filter(start__gt=now).delete()
+    # Starting here, we'll start to store the new schedules into the database.
+    # Hence, we start a transaction so the update is consistant.
+    with transaction.atomic():
+        if reset:
+            click.echo("Removing existing scheduled streams…")
+            ScheduledStream.objects.filter(start__gte=now).delete()
 
-    click.echo("Fetching existing scheduled streams…")
+        click.echo("Fetching existing scheduled streams…")
 
-    stored_scheduled = ScheduledStream.objects.filter(start__gt=now)
-    scheduled_by_source_id = {}
-    for scheduled in stored_scheduled:
-        scheduled_by_source_id[(scheduled.twitch_segment_id, scheduled.start, scheduled.streamer.twitch_id)] = scheduled
-        scheduled_by_source_id[
-            (scheduled.google_calendar_event_id, scheduled.start, scheduled.streamer.twitch_id)
-        ] = scheduled
+        stored_scheduled = ScheduledStream.objects.filter(start__gte=now)
+        scheduled_by_source_id = {}
+        for scheduled in stored_scheduled:
+            scheduled_by_source_id[
+                (scheduled.twitch_segment_id, scheduled.start, scheduled.streamer.twitch_id)
+            ] = scheduled
+            scheduled_by_source_id[
+                (scheduled.google_calendar_event_id, scheduled.start, scheduled.streamer.twitch_id)
+            ] = scheduled
 
-    def has_stored_schedule(schedule):
-        return (
-            schedule["twitch_segment_id"],
-            schedule["start"],
-            schedule["streamer"].twitch_id,
-        ) in scheduled_by_source_id or (
-            schedule["google_calendar_event_id"],
-            schedule["start"],
-            schedule["streamer"].twitch_id,
-        ) in scheduled_by_source_id
+        def has_stored_schedule(schedule):
+            return (
+                schedule["twitch_segment_id"],
+                schedule["start"],
+                schedule["streamer"].twitch_id,
+            ) in scheduled_by_source_id or (
+                schedule["google_calendar_event_id"],
+                schedule["start"],
+                schedule["streamer"].twitch_id,
+            ) in scheduled_by_source_id
 
-    def get_stored_schedule(schedule):
-        return scheduled_by_source_id.get(
-            (schedule["twitch_segment_id"], schedule["start"], schedule["streamer"].twitch_id),
-            scheduled_by_source_id.get(
-                (schedule["google_calendar_event_id"], schedule["start"], schedule["streamer"].twitch_id)
-            ),
+        def get_stored_schedule(schedule):
+            return scheduled_by_source_id.get(
+                (schedule["twitch_segment_id"], schedule["start"], schedule["streamer"].twitch_id),
+                scheduled_by_source_id.get(
+                    (schedule["google_calendar_event_id"], schedule["start"], schedule["streamer"].twitch_id)
+                ),
+            )
+
+        scheduled_to_update = []
+
+        with click.progressbar(twitch_events, label="Saving scheduled streams to database…") as bar:
+            for event in bar:
+                # The scheduled stream already exist in the database
+                if has_stored_schedule(event):
+                    scheduled: ScheduledStream = get_stored_schedule(event)
+
+                    # Update the record with the data collected, to allow for updates if needed
+                    if scheduled is not None:
+                        scheduled.streamer = event["streamer"]
+                        scheduled.title = event["title"]
+                        scheduled.start = event["start"]
+                        scheduled.end = event["end"]
+                        scheduled.category = event["category"]
+                        scheduled.weekly = event["weekly"]
+                        scheduled.twitch_segment_id = event["twitch_segment_id"]
+                        scheduled.google_calendar_event_id = event["google_calendar_event_id"]
+
+                        scheduled_to_update.append(scheduled)
+                        continue
+
+                # The scheduled stream is new
+                ScheduledStream(
+                    streamer=event["streamer"],
+                    title=event["title"],
+                    start=event["start"],
+                    end=event["end"],
+                    category=event["category"],
+                    weekly=event["weekly"],
+                    twitch_segment_id=event["twitch_segment_id"],
+                    google_calendar_event_id=event["google_calendar_event_id"],
+                ).save()
+
+        click.echo("Updating existing scheduled streams…")
+        ScheduledStream.objects.bulk_update(
+            scheduled_to_update,
+            fields=[
+                "streamer",
+                "title",
+                "start",
+                "end",
+                "category",
+                "weekly",
+                "twitch_segment_id",
+                "google_calendar_event_id",
+            ],
         )
 
-    scheduled_to_update = []
-
-    with click.progressbar(twitch_events, label="Saving scheduled streams to database…") as bar:
-        for event in bar:
-            # The scheduled stream already exist in the database
-            if has_stored_schedule(event):
-                scheduled: ScheduledStream = get_stored_schedule(event)
-
-                # Update the record with the data collected, to allow for updates if needed
-                if scheduled is not None:
-                    scheduled.streamer = event["streamer"]
-                    scheduled.title = event["title"]
-                    scheduled.start = event["start"]
-                    scheduled.end = event["end"]
-                    scheduled.category = event["category"]
-                    scheduled.weekly = event["weekly"]
-                    scheduled.twitch_segment_id = event["twitch_segment_id"]
-                    scheduled.google_calendar_event_id = event["google_calendar_event_id"]
-
-                    scheduled_to_update.append(scheduled)
-                    continue
-
-            # The scheduled stream is new
-            ScheduledStream(
-                streamer=event["streamer"],
-                title=event["title"],
-                start=event["start"],
-                end=event["end"],
-                category=event["category"],
-                weekly=event["weekly"],
-                twitch_segment_id=event["twitch_segment_id"],
-                google_calendar_event_id=event["google_calendar_event_id"],
-            ).save()
-
-    click.echo("Updating existing scheduled streams…")
-    ScheduledStream.objects.bulk_update(
-        scheduled_to_update,
-        fields=[
-            "streamer",
-            "title",
-            "start",
-            "end",
-            "category",
-            "weekly",
-            "twitch_segment_id",
-            "google_calendar_event_id",
-        ],
-    )
+        click.echo("Deleting removed scheduled streams…", nl=False)
+        twitch_segments_ids = [s.twitch_segment_id for s in stored_scheduled]
+        google_calendar_event_ids = [s.google_calendar_event_id for s in stored_scheduled]
+        deleted, _ = (
+            ScheduledStream.objects.filter(start__gte=now)
+            .filter(
+                ~Q(twitch_segment_id__in=twitch_segments_ids)
+                & ~Q(google_calendar_event_id__in=google_calendar_event_ids)
+            )
+            .delete()
+        )
+        click.echo(f" {deleted} deleted.")
 
     click.echo(click.style("\nDone.", fg="green"))

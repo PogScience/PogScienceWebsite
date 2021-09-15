@@ -45,49 +45,52 @@ def background_image_upload_to(*args, **kwargs):
 
 
 class Streamer(models.Model):
+    """
+    A streamer, member of PogScience.
+    """
     class Meta:
         ordering = ["name", "twitch_login"]
 
     user = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
-        verbose_name=_("Compte interne du streamer"),
+        verbose_name=_("compte interne du streamer"),
         null=True,
         blank=True,
         default=None,
     )
 
     name = models.CharField(
-        verbose_name=_("Nom du streamer"),
+        verbose_name=_("nom du streamer"),
         max_length=128,
         help_text=_("Le nom d'affichage du/de la streamer⋅euse"),
     )
     twitch_login = models.CharField(
-        verbose_name=_("Le nom d'utilisateur Twitch exact"),
+        verbose_name=_("nom d'utilisateur Twitch"),
         max_length=64,
         help_text=_("Utilisé pour récupérer les informations automatiquement"),
     )
     twitch_id = models.PositiveBigIntegerField(verbose_name=_("L'identifiant numérique Twitch"))
     description = models.CharField(
-        verbose_name=_("Courte description"),
+        verbose_name=_("courte description"),
         max_length=512,
         help_text=_("Une courte description affichée par exemple sur la page d'accueil"),
         blank=True,
     )
     long_description = models.TextField(
-        verbose_name=_("Longue description"),
+        verbose_name=_("longue description"),
         help_text=_("Description potentiellement très longue affichée sur la page du streamer ou de la streameuse"),
         blank=True,
     )
     profile_image = models.ImageField(
-        verbose_name=_("Image de profil"),
+        verbose_name=_("image de profil"),
         storage=OverwriteStorage(),
         upload_to=profile_image_upload_to,
         null=True,
         blank=True,
     )
     background_image = models.ImageField(
-        verbose_name=_("Image de fond"),
+        verbose_name=_("image de fond"),
         storage=OverwriteStorage(),
         upload_to=background_image_upload_to,
         null=True,
@@ -95,12 +98,12 @@ class Streamer(models.Model):
     )
 
     live = models.BooleanField(
-        verbose_name=_("Est en live actuellement"),
+        verbose_name=_("en live actuellement ?"),
         help_text=_("Est-iel en live actuellement ? Mis à jour automatiquement"),
         default=False,
     )
     live_title = models.CharField(
-        verbose_name=_("Titre du live"),
+        verbose_name=_("titre du live"),
         max_length=140,
         blank=True,
         null=True,
@@ -108,7 +111,7 @@ class Streamer(models.Model):
         help_text=_("Le titre du live en cours, récupéré automatiquement depuis Twitch"),
     )
     live_game_name = models.CharField(
-        verbose_name=_("Catégorie du stream"),
+        verbose_name=_("catégorie du stream"),
         max_length=140,
         blank=True,
         null=True,
@@ -151,6 +154,9 @@ class Streamer(models.Model):
 
 
 class ScheduledStream(models.Model):
+    """
+    A streamer's planned stream, loaded from Twitch or Google Calendar.
+    """
     streamer = models.ForeignKey(
         Streamer,
         verbose_name=_("streamer ayant programmé le stream"),
