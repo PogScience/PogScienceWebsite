@@ -256,11 +256,11 @@ def command(reset):
     with transaction.atomic():
         if reset:
             click.echo("Removing existing scheduled streams…")
-            ScheduledStream.objects.filter(start__gte=now).delete()
+            ScheduledStream.objects.filter(end__gte=now).delete()
 
         click.echo("Fetching existing scheduled streams…")
 
-        stored_scheduled = ScheduledStream.objects.filter(start__gte=now)
+        stored_scheduled = ScheduledStream.objects.filter(end__gte=now)
         scheduled_by_source_id = {}
         for scheduled in stored_scheduled:
             scheduled_by_source_id[
@@ -338,11 +338,14 @@ def command(reset):
             ],
         )
 
+        # We delete streams in the future that were not collected by the script,
+        # but are stored in the database: these streams existed before but are now
+        # deleted, so we delete them in our database too.
         click.echo("Deleting removed scheduled streams…", nl=False)
-        twitch_segments_ids = [s.twitch_segment_id for s in stored_scheduled]
-        google_calendar_event_ids = [s.google_calendar_event_id for s in stored_scheduled]
+        twitch_segments_ids = [s['twitch_segment_id'] for s in twitch_events]
+        google_calendar_event_ids = [s['google_calendar_event_id'] for s in twitch_events]
         deleted, _ = (
-            ScheduledStream.objects.filter(start__gte=now)
+            ScheduledStream.objects.filter(end__gte=now)
             .filter(
                 ~Q(twitch_segment_id__in=twitch_segments_ids)
                 & ~Q(google_calendar_event_id__in=google_calendar_event_ids)
