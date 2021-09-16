@@ -2,6 +2,7 @@
 
 secrets.toml
 static/dist
+webpack-stats.json
 
 
 ### Node ###

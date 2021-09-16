@@ -1,0 +1,69 @@
+# PogScience website
+
+This repository hosts the PogScience website. This project is tailored for the PogScience community, but can be adapted
+for every other Twitch streaming group by updating the templates a little.
+
+## Features
+
+Planned features for the first stable version are:
+
+- list of all streamers in the group;
+- monitoring of lives from these streamers, real-time, using the Twitch API and Twitch webhooks;
+- sync of planned streams, from both Twitch Schedules and Google Calendar (if any);
+- display of the live and upcoming streams on the homepage, plus a dedicated page with the full calendar;
+- no maintenance when configured, reusing existing sources, so streamers don't have another system to update;
+- Twitch login for administrators and streamers, to avoid an extra account;
+- press page with statistics and such.
+
+Planned features after the first version are:
+
+- option to raid other streamers with a single click, if logged in;
+- group events support: streamers and administrators will be able to create a dedicated webpage for group-wide events,
+  in the spirit of [`generations-sorciers.fr`](https://generations-sorciers.fr) (French only), with a description and a
+  calendar of streams in the event.
+
+## Installation
+
+We develop this website with Python 3.9+, pipenv, Django, NodeJS 12+, and webpack.
+
+### Development version
+
+A Makefile helps developers to install and run the development environnement locally, on UNIX-like systems. Run `make`
+for help.
+
+You need to have globally available Python 3.9 or later, NodeJS 12 or later, and pipenv (`pip install pipenv`). Then:
+
+```shell
+$ make install  # Install all dependencies.
+$ make run      # Run the server in development mode, and webpack in watch mode.
+```
+
+The port will be printed on the console. It is usually [`localhost:8000`](http://localhost:8000). For the Twitch login
+to work (see below), you have to use the `localhost` URL.
+
+### Production deployment
+
+TODO, but: Ansible. 🔥
+
+### Secrets
+
+As it use Google and Twitch APIs, this website needs some secrets to work correctly. You'll have to [create a Twitch
+application](https://dev.twitch.tv/console), the callback URL being `http://localhost:8000/complete/twitch/` _exactly_.
+
+If you want to be able to import events from Google Calendar, you also need a Google API Key. On the [Google Cloud
+Console](https://console.cloud.google.com):
+
+1. create a project;
+2. the [_API and services_ section](https://console.cloud.google.com/apis/dashboard), click “Enable API and services”,
+   lookup for “calendar”, and enable the Google Calendar API ; 
+3. in “API and services” → “Identifiers”, create a new API Key (you don't need an  OAuth Client ID for this as we only
+   read public calendars). I recommend restricting the API Key to the Google Calendar API only.
+   
+Now that you have all secrets you need, duplicate the `secrets.example.toml` file, rename it a `secrets.toml`, and write
+the secrets in it.
+
+## Commands
+
+We added a few commands to the Django commands system. Add `--help` for help on each command.
+
+- `./manage.py syncschedules` — Loads scheduled streams from Twitch and Google Calendar. _Every 15 min in production._
