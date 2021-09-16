@@ -125,131 +125,136 @@ def command(reset):
 
     click.echo(f"{len(twitch_events)} scheduled streams loaded from Twitch.\n")
 
-    # We then load Google Calendar events; we'll merge them with the former.
-    click.echo("Loading scheduled streams from Google Calendar…")
-    gcal_service = discovery.build("calendar", "v3", developerKey=settings.POG_SCHEDULE["GOOGLE_API_KEY"])
+    if settings.POG_SCHEDULE["GOOGLE_API_KEY"] and settings.POG_SCHEDULE["GOOGLE_CALENDAR_ID"]:
 
-    timeMin = now.isoformat()
-    timeMax = (now + settings.POG_SCHEDULE["FETCH_UNTIL"]).isoformat()
+        # We then load Google Calendar events; we'll merge them with the former.
+        click.echo("Loading scheduled streams from Google Calendar…")
+        gcal_service = discovery.build("calendar", "v3", developerKey=settings.POG_SCHEDULE["GOOGLE_API_KEY"])
 
-    gcal_events_response = (
-        gcal_service.events()
-        .list(
-            calendarId=settings.POG_SCHEDULE["GOOGLE_CALENDAR_ID"],
-            singleEvents=True,
-            orderBy="startTime",
-            timeMin=timeMin,
-            timeMax=timeMax,
-            timeZone="UTC",
-        )
-        .execute()
-    )
+        timeMin = now.isoformat()
+        timeMax = (now + settings.POG_SCHEDULE["FETCH_UNTIL"]).isoformat()
 
-    gcal_raw_events = gcal_events_response.get("items", [])
-    gcal_events = []
-
-    # We try to associate events with streamers, matching channels names in the events
-    # We first try to match the link in the event location, then at the beginning
-    # of the summary, and if nothing is found, anywhere in the event summary.
-    re_event_location_twitch_link = re.compile(r"https?://(www\.)?twitch\.tv/(?P<twitch_login>[a-zA-Z_]{4,25})")
-
-    def has_streamer(streamer, lst):
-        return any([streamer.name == entry["streamer"].name for entry in lst])
-
-    def best_streamer(lst):
-        return sorted(lst, key=lambda e: e["weight"], reverse=True)[0]["streamer"]
-
-    for event in gcal_raw_events:
-        start = dp.parse(event["start"].get("dateTime", event["start"].get("date")))
-        end = dp.parse(event["end"].get("dateTime", event["end"].get("date")))
-        event_streamers = []
-        event_streamer_names_in_summary = []
-        event_summary = event["summary"]
-
-        if "location" in event:
-            match = re_event_location_twitch_link.search(event["location"])
-            if match:
-                streamer = streamers_alternate_names.get(match.group("twitch_login"))
-                event_streamers.append({"streamer": streamer, "weight": 100})
-                event_streamer_names_in_summary.extend([streamer.name, streamer.twitch_login])
-
-        for name, streamer in streamers_alternate_names.items():
-            if event["summary"].startswith(name):
-                if not has_streamer(streamer, event_streamers):
-                    event_streamers.append({"streamer": streamer, "weight": 50})
-                event_streamer_names_in_summary.append(name)
-
-        for name, streamer in streamers_alternate_names.items():
-            if name in event["summary"]:
-                if not has_streamer(streamer, event_streamers):
-                    event_streamers.append({"streamer": streamer, "weight": 10})
-                event_streamer_names_in_summary.append(name)
-                break
-
-        if not event_streamers:
-            click.echo(f"** Unable to extract streamer from event “{event['summary']}”: ignored", err=True)
-            continue
-
-        for name in event_streamer_names_in_summary:
-            event_summary, n = re.subn(r"^" + re.escape(name) + r"\s{0,3}[/:–—-]", "", event_summary)
-            if n > 0:
-                event_summary = event_summary.strip()
-                break
-
-        gcal_events.append(
-            {
-                "streamer": best_streamer(event_streamers),
-                "title": event_summary,
-                "start": start,
-                "end": end,
-                "category": None,
-                "weekly": "recurringEventId" in event,
-                "twitch_segment_id": None,
-                "google_calendar_event_id": event["id"],
-                "__potential_streamers": sorted(event_streamers, key=lambda e: e["weight"], reverse=True),
-            }
+        gcal_events_response = (
+            gcal_service.events()
+            .list(
+                calendarId=settings.POG_SCHEDULE["GOOGLE_CALENDAR_ID"],
+                singleEvents=True,
+                orderBy="startTime",
+                timeMin=timeMin,
+                timeMax=timeMax,
+                timeZone="UTC",
+            )
+            .execute()
         )
 
-    click.echo(f"{len(gcal_raw_events)} scheduled streams loaded from Google Calendar.\n")
+        gcal_raw_events = gcal_events_response.get("items", [])
+        gcal_events = []
 
-    # For each Google Calendar event, we try to lookup for a Twitch event from
-    # the same streamer (testing each potential one, the most likely first)
-    # happening at the same time (times must overlap). If one is found, we merge
-    # them, the Twitch event being the winner on conflicts.
-    twitch_events_by_streamer = {}
-    for event in twitch_events:
-        twitch_events_by_streamer.setdefault(event["streamer"].twitch_login, [])
-        twitch_events_by_streamer[event["streamer"].twitch_login].append(event)
+        # We try to associate events with streamers, matching channels names in the events
+        # We first try to match the link in the event location, then at the beginning
+        # of the summary, and if nothing is found, anywhere in the event summary.
+        re_event_location_twitch_link = re.compile(r"https?://(www\.)?twitch\.tv/(?P<twitch_login>[a-zA-Z_]{4,25})")
 
-    unique_gcal_events = []
-    with click.progressbar(gcal_events, label="Merging Twitch and Google Calendar scheduled streams…") as bar:
-        for gcal_event in bar:
-            merged = False
-            for ps in gcal_event["__potential_streamers"]:
-                potential_streamer, _ = ps.values()
-                merge_with = None
-                if potential_streamer.twitch_login not in twitch_events_by_streamer:
-                    continue
+        def has_streamer(streamer, lst):
+            return any([streamer.name == entry["streamer"].name for entry in lst])
 
-                for twitch_event in twitch_events_by_streamer[potential_streamer.twitch_login]:
-                    if twitch_event["start"] <= gcal_event["end"] and twitch_event["end"] >= gcal_event["start"]:
-                        merge_with = twitch_event
-                        break
+        def best_streamer(lst):
+            return sorted(lst, key=lambda e: e["weight"], reverse=True)[0]["streamer"]
 
-                if merge_with:
-                    merge_with["google_calendar_event_id"] = gcal_event["google_calendar_event_id"]
-                    merged = True
+        for event in gcal_raw_events:
+            start = dp.parse(event["start"].get("dateTime", event["start"].get("date")))
+            end = dp.parse(event["end"].get("dateTime", event["end"].get("date")))
+            event_streamers = []
+            event_streamer_names_in_summary = []
+            event_summary = event["summary"]
+
+            if "location" in event:
+                match = re_event_location_twitch_link.search(event["location"])
+                if match:
+                    streamer = streamers_alternate_names.get(match.group("twitch_login"))
+                    event_streamers.append({"streamer": streamer, "weight": 100})
+                    event_streamer_names_in_summary.extend([streamer.name, streamer.twitch_login])
+
+            for name, streamer in streamers_alternate_names.items():
+                if event["summary"].startswith(name):
+                    if not has_streamer(streamer, event_streamers):
+                        event_streamers.append({"streamer": streamer, "weight": 50})
+                    event_streamer_names_in_summary.append(name)
+
+            for name, streamer in streamers_alternate_names.items():
+                if name in event["summary"]:
+                    if not has_streamer(streamer, event_streamers):
+                        event_streamers.append({"streamer": streamer, "weight": 10})
+                    event_streamer_names_in_summary.append(name)
                     break
 
-            # If the event could not be merged with a Twitch event, it's a new one!
-            # We'll add it to the Twitch events.
-            if not merged:
-                del gcal_event["__potential_streamers"]
-                unique_gcal_events.append(gcal_event)
+            if not event_streamers:
+                click.echo(f"** Unable to extract streamer from event “{event['summary']}”: ignored", err=True)
+                continue
 
-    twitch_events.extend(unique_gcal_events)
+            for name in event_streamer_names_in_summary:
+                event_summary, n = re.subn(r"^" + re.escape(name) + r"\s{0,3}[/:–—-]", "", event_summary)
+                if n > 0:
+                    event_summary = event_summary.strip()
+                    break
 
-    click.echo(f"{len(twitch_events)} scheduled streams loaded from both sources, after merge.\n")
+            gcal_events.append(
+                {
+                    "streamer": best_streamer(event_streamers),
+                    "title": event_summary,
+                    "start": start,
+                    "end": end,
+                    "category": None,
+                    "weekly": "recurringEventId" in event,
+                    "twitch_segment_id": None,
+                    "google_calendar_event_id": event["id"],
+                    "__potential_streamers": sorted(event_streamers, key=lambda e: e["weight"], reverse=True),
+                }
+            )
+
+        click.echo(f"{len(gcal_raw_events)} scheduled streams loaded from Google Calendar.\n")
+
+        # For each Google Calendar event, we try to lookup for a Twitch event from
+        # the same streamer (testing each potential one, the most likely first)
+        # happening at the same time (times must overlap). If one is found, we merge
+        # them, the Twitch event being the winner on conflicts.
+        twitch_events_by_streamer = {}
+        for event in twitch_events:
+            twitch_events_by_streamer.setdefault(event["streamer"].twitch_login, [])
+            twitch_events_by_streamer[event["streamer"].twitch_login].append(event)
+
+        unique_gcal_events = []
+        with click.progressbar(gcal_events, label="Merging Twitch and Google Calendar scheduled streams…") as bar:
+            for gcal_event in bar:
+                merged = False
+                for ps in gcal_event["__potential_streamers"]:
+                    potential_streamer, _ = ps.values()
+                    merge_with = None
+                    if potential_streamer.twitch_login not in twitch_events_by_streamer:
+                        continue
+
+                    for twitch_event in twitch_events_by_streamer[potential_streamer.twitch_login]:
+                        if twitch_event["start"] <= gcal_event["end"] and twitch_event["end"] >= gcal_event["start"]:
+                            merge_with = twitch_event
+                            break
+
+                    if merge_with:
+                        merge_with["google_calendar_event_id"] = gcal_event["google_calendar_event_id"]
+                        merged = True
+                        break
+
+                # If the event could not be merged with a Twitch event, it's a new one!
+                # We'll add it to the Twitch events.
+                if not merged:
+                    del gcal_event["__potential_streamers"]
+                    unique_gcal_events.append(gcal_event)
+
+        twitch_events.extend(unique_gcal_events)
+
+        click.echo(f"{len(twitch_events)} scheduled streams loaded from both sources, after merge.\n")
+
+    else:
+        click.echo("No streams loaded from Google Calendar: API key or calendar ID not configured.\n")
 
     # Starting here, we'll start to store the new schedules into the database.
     # Hence, we start a transaction so the update is consistant.
