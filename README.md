@@ -60,8 +60,8 @@ Console](https://console.cloud.google.com):
    (you don't need an  OAuth Client ID for this as we only read public calendars). I recommend restricting the API Key
    to the Google Calendar API only.
    
-Now that you have all secrets you need, duplicate the `secrets.example.toml` file, rename it a `secrets.toml`, and write
-the secrets in it.
+Now that you have all secrets you need, duplicate the `secrets.example.toml` file, rename it as `secrets.toml`, and
+write the secrets in it.
 
 ## Commands
 
