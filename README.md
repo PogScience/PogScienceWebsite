@@ -53,11 +53,12 @@ application](https://dev.twitch.tv/console), the callback URL being `http://loca
 If you want to be able to import events from Google Calendar, you also need a Google API Key. On the [Google Cloud
 Console](https://console.cloud.google.com):
 
-1. create a project;
-2. the [_API and services_ section](https://console.cloud.google.com/apis/dashboard), click “Enable API and services”,
-   lookup for “calendar”, and enable the Google Calendar API ; 
-3. in “API and services” → “Identifiers”, create a new API Key (you don't need an  OAuth Client ID for this as we only
-   read public calendars). I recommend restricting the API Key to the Google Calendar API only.
+1. [create a project](https://console.cloud.google.com/projectcreate);
+2. in [_API and services_](https://console.cloud.google.com/apis/dashboard), click “Enable API and services” at the top
+   left of the page, then lookup for “calendar”, and enable the Google Calendar API; 
+3. in [“Identifiers” under _API and services_](https://console.cloud.google.com/apis/credentials), create a new API Key
+   (you don't need an  OAuth Client ID for this as we only read public calendars). I recommend restricting the API Key
+   to the Google Calendar API only.
    
 Now that you have all secrets you need, duplicate the `secrets.example.toml` file, rename it a `secrets.toml`, and write
 the secrets in it.
