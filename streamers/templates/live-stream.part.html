@@ -1,0 +1,43 @@
+{% load i18n %}
+
+<article class="box live-stream{% if solo %} is-solo{% endif %}">
+    <figure>
+        <a href="{{ streamer.twitch_url }}">
+            <img src="{{ MEDIA_URL }}{{ streamer.profile_image }}" alt="{{ streamer.name }}" />
+        </a>
+    </figure>
+
+    <a href="{{ streamer.twitch_url }}" class="stream-box-content">
+        <h3>{{ streamer.live_title }}</h3>
+        <div class="game">
+            <figure class="streamer-picture-mobile">
+                <img src="{{ MEDIA_URL }}{{ streamer.profile_image }}" alt="{{ streamer.name }}" />
+            </figure>
+            <span class="streamer-name">{{ streamer.name }}</span>
+            {% if streamer.live_game_name %}<span class="streamer-game">&nbsp;&centerdot;&nbsp;{{ streamer.live_game_name }}</span>{% endif %}
+        </div>
+
+        <footer>
+            {% if streamer.live %}
+                <time datetime="{% now "c" %}">
+                    <span class="tag is-danger">EN DIRECT</span>
+                    {% if streamer.live_end %}jusqu'à {{ streamer.live_end|date:"H\hi" }}{% endif %}
+                </time>
+            {% endif %}
+            <button class="button is-twitch is-small" disabled data-tooltip="{% trans "À venir…" %}">
+                <span class="icon is-small"><span class="fas fa-bolt"></span></span>
+                <span>RAID</span>
+            </button>
+        </footer>
+    </a>
+
+    <div class="stream-box-preview">
+        <figure class="image is-16by9 is-fullwidth">
+            <img src="{{ MEDIA_URL }}{{ streamer.live_preview }}" alt="{% trans "Aperçu du live" %}">
+            <button class="button is-twitch is-medium" disabled data-tooltip="{% trans "À venir…" %}">
+                <span class="icon"><span class="fas fa-bolt"></span></span>
+                <span>RAID</span>
+            </button>
+        </figure>
+    </div>
+</article>

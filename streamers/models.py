@@ -5,6 +5,7 @@ import requests
 from django.contrib import admin
 from django.core import files
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
@@ -44,10 +45,15 @@ def background_image_upload_to(*args, **kwargs):
     return image_upload_to("background")(*args, **kwargs)
 
 
+def live_preview_image_upload_to(*args, **kwargs):
+    return image_upload_to("live-preview")(*args, **kwargs)
+
+
 class Streamer(models.Model):
     """
     A streamer, member of PogScience.
     """
+
     class Meta:
         ordering = ["name", "twitch_login"]
 
@@ -118,9 +124,20 @@ class Streamer(models.Model):
         default=None,
         help_text=_("La catégorie du live en cours, récupéré automatiquement depuis Twitch"),
     )
+    live_preview = models.ImageField(
+        verbose_name=_("aperçu du live"),
+        storage=OverwriteStorage(),
+        upload_to=live_preview_image_upload_to,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
+
+    @property
+    def twitch_url(self):
+        return f"https://twitch.tv/{self.twitch_login}"
 
     def update_from_twitch_data(self, twitch_data):
         """
@@ -157,6 +174,7 @@ class ScheduledStream(models.Model):
     """
     A streamer's planned stream, loaded from Twitch or Google Calendar.
     """
+
     streamer = models.ForeignKey(
         Streamer,
         verbose_name=_("streamer ayant programmé le stream"),
@@ -189,6 +207,11 @@ class ScheduledStream(models.Model):
     @admin.display(description=_("Durée"))
     def duration(self):
         return self.end - self.start
+
+    @property
+    def now(self):
+        now = timezone.now()
+        return self.start < now < self.end
 
     def __str__(self):
         return f"{self.title} ({self.streamer}, {self.start} → {self.end})"

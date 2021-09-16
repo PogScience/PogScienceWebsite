@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.db.models import QuerySet
@@ -8,7 +9,27 @@ from django.utils.translation import gettext_lazy as _
 from streamers.models import User, Streamer, ScheduledStream
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Streamer)
+
+
+@admin.register(Streamer)
+class StreamerAdmin(admin.ModelAdmin):
+    list_display = ("name_with_image", "description", "live", "live_title")
+
+    @admin.display(description="Name", ordering="twitch_login")
+    def name_with_image(self, instance: Streamer):
+        return format_html(
+            """
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <figure style="margin: 4px"><img src="{}{}" alt="{}" style="border-radius: 31415926535px; width: 48px; height: 48px;" /></figure>
+                <p style="flex: 4">{}<br /><span style="color: #ccc; font-weight: normal;">@{}</span></p>
+            </div>
+            """,
+            settings.MEDIA_URL,
+            instance.profile_image,
+            instance.name,
+            instance.name,
+            instance.twitch_login,
+        )
 
 
 class FutureStreamFilter(admin.SimpleListFilter):
@@ -28,7 +49,7 @@ class FutureStreamFilter(admin.SimpleListFilter):
         if self.value() == "future":
             return queryset.filter(start__gte=now)
         elif self.value() == "live":
-            return queryset.filter(start__gte=now, end__lte=now)
+            return queryset.filter(start__lte=now, end__gte=now)
         elif self.value() == "past":
             return queryset.filter(end__lte=now)
 

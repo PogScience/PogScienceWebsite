@@ -51,7 +51,10 @@ $hero-body-padding-medium: 10rem 6rem;
 @import "~bulma/sass/layout/hero";
 @import "~bulma/sass/layout/footer";
 
+$tooltip-font-size: $size-6;
+
 @import "~@creativebulma/bulma-divider";
+@import "~@creativebulma/bulma-tooltip";
 
 @import "sass/administration/all";
 @import "sass/streamers/all";

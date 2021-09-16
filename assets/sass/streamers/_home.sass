@@ -1,3 +1,5 @@
+@use "sass:math"
+
 %stream-box
   padding: 0
   display: flex
@@ -25,15 +27,40 @@
       font-weight: 600
       line-height: 1.1
 
-    p.game
+    .game
       flex: 4
+
       .streamer-name
         font-weight: 600
+
+      .streamer-picture-mobile
+        display: none
+
+      +mobile
+        display: flex
+        flex-direction: row
+        align-items: center
+
+        margin-top: .6rem
+
+        .streamer-picture-mobile
+          display: inline-block
+          margin-right: .4rem
+
+          img
+            width: 1.5rem
+            height: 1.5rem
+            border-radius: 314159265px
+
 
     footer
       display: flex
       flex-direction: row
       align-items: end
+
+      +mobile
+        margin-top: 1rem
+        align-items: center
 
       time
         flex: 4
@@ -43,6 +70,24 @@
         font-size: $size-5
         color: $twitch
 
+      button
+        display: none
+
+        +mobile
+          display: block
+          border-radius: 6px
+
+          span.icon
+            display: inline-flex
+            align-items: center
+            margin: 0 .2rem
+            width: 1rem
+            height: 1rem
+
+            span.fas
+              font-size: .8rem
+              color: $white
+
 section.right-now
   background-color: $grey-dark
   color: $white
@@ -51,8 +96,14 @@ section.right-now
     display: flex
     flex-direction: row
 
+    +mobile
+      flex-direction: column
+
     > .titles
       flex: 4
+
+      +mobile
+        margin-bottom: 1.5rem
 
       > h2, > p
         color: $white
@@ -62,10 +113,14 @@ section.right-now
       font-size: $size-6
       text-align: right
 
+      +mobile
+        text-align: center
+
       .is-timezone
         margin-top: .4rem
 
   .divider
+    margin: 1.75rem 0 1rem 0
     color: $white
 
   .columns
@@ -74,16 +129,64 @@ section.right-now
   article.scheduled-stream
     @extend %stream-box
 
+  $live-stream-solo-height: 12rem
+  $live-stream-sol-preview-width: 18rem
+
   article.live-stream
     @extend %stream-box
 
     &.is-solo
-      margin: 1.5rem 6rem
+      margin: 1.5rem 0
+
+      +widescreen
+        margin: 1.5rem 6rem
 
     > figure
-      height: 196px
+      height: $live-stream-solo-height
+
+      +mobile
+        display: none
+
     > .stream-box-content
+      height: $live-stream-solo-height
+
+      +mobile
+        height: auto
+
       h3
         font-size: $size-4
-      p.game
-        //font-size: $size-5
+
+        +touch
+          font-size: $size-5
+
+    > .stream-box-preview
+      align-self: center
+
+      position: relative
+      width: $live-stream-sol-preview-width
+
+      +tablet-only
+        width: $live-stream-sol-preview-width - 1rem
+
+      +mobile
+        display: none
+
+      margin: 0 1.5rem
+
+      img
+        border: 6px solid $twitch
+        border-radius: 6px
+        height: 100%
+
+      button
+        position: absolute
+        bottom: 0
+        left: calc(50% - #{math.div($live-stream-sol-preview-width, 4)})
+
+        width: math.div($live-stream-sol-preview-width, 2)
+
+        opacity: 0
+        transition: opacity .1s ease-in-out
+
+    &:hover .stream-box-preview button
+        opacity: 1
