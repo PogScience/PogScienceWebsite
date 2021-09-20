@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from io import BytesIO
 
 import requests
@@ -55,6 +56,8 @@ class Streamer(models.Model):
     """
 
     class Meta:
+        verbose_name = _("streamer")
+        verbose_name_plural = _("streamers")
         ordering = ["name", "twitch_login"]
 
     user = models.OneToOneField(
@@ -76,7 +79,10 @@ class Streamer(models.Model):
         max_length=64,
         help_text=_("Utilisé pour récupérer les informations automatiquement"),
     )
-    twitch_id = models.PositiveBigIntegerField(verbose_name=_("L'identifiant numérique Twitch"))
+    twitch_id = models.PositiveBigIntegerField(
+        verbose_name=_("identifiant numérique Twitch"),
+        help_text=_("Utilisé pour récupérer les informations automatiquement"),
+    )
     description = models.CharField(
         verbose_name=_("courte description"),
         max_length=512,
@@ -170,10 +176,72 @@ class Streamer(models.Model):
         _download_and_store_image("offline_image_url", self.background_image)
 
 
+class EventSubSubscription(models.Model):
+    class Meta:
+        verbose_name = _("abonnement EventSub")
+        verbose_name_plural = _("abonnements EventSub")
+
+    UNSUBSCRIBED = "unsubscribed"
+    SUBSCRIBED = "subscribed"
+    PENDING = "pending"
+    STATUS_CHOICES = [
+        (UNSUBSCRIBED, _("Non-souscrit")),
+        (PENDING, _("En attente")),
+        (SUBSCRIBED, _("Souscrit")),
+    ]
+
+    streamer = models.ForeignKey(
+        Streamer,
+        verbose_name=_("Streamer"),
+        related_name="eventsub_subscriptions",
+        on_delete=models.CASCADE,
+    )
+
+    type = models.CharField(
+        verbose_name=_("subscription type"),
+        max_length=100,
+    )
+
+    uuid = models.UUIDField(
+        verbose_name=_("subscription UUID"),
+    )
+
+    secret = models.CharField(
+        verbose_name=_("subscription secret"),
+        help_text=_("Secret to authenticate the subscription requests from Twitch"),
+        max_length=100,
+    )
+
+    status = models.CharField(
+        verbose_name=_("subscription status"),
+        max_length=12,
+        choices=STATUS_CHOICES,
+        default=UNSUBSCRIBED,
+    )
+
+    last_seen = models.DateTimeField(
+        verbose_name=_("last seen"),
+        help_text=_("When was the last request from Twitch received"),
+        blank=True,
+        null=True,
+    )
+
+    @property
+    def last_seen_since(self) -> timedelta:
+        return timezone.now() - self.last_seen
+
+    def __str__(self):
+        return f"EventSub subscription {self.type}"
+
+
 class ScheduledStream(models.Model):
     """
     A streamer's planned stream, loaded from Twitch or Google Calendar.
     """
+
+    class Meta:
+        verbose_name = _("Stream planifié")
+        verbose_name_plural = _("Streams planifiés")
 
     streamer = models.ForeignKey(
         Streamer,

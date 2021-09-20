@@ -347,8 +347,8 @@ def command(reset):
         # but are stored in the database: these streams existed before but are now
         # deleted, so we delete them in our database too.
         click.echo("Deleting removed scheduled streams…", nl=False)
-        twitch_segments_ids = [s['twitch_segment_id'] for s in twitch_events]
-        google_calendar_event_ids = [s['google_calendar_event_id'] for s in twitch_events]
+        twitch_segments_ids = [s["twitch_segment_id"] for s in twitch_events]
+        google_calendar_event_ids = [s["google_calendar_event_id"] for s in twitch_events]
         deleted, _ = (
             ScheduledStream.objects.filter(end__gte=now)
             .filter(

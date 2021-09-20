@@ -63,8 +63,26 @@ Console](https://console.cloud.google.com):
 Now that you have all secrets you need, duplicate the `secrets.example.toml` file, rename it as `secrets.toml`, and
 write the secrets in it.
 
+### How to test Twitch EventSub in development
+
+As Twitch need to send requests to your local installation, you'll have to install some sort of port forwarding system
+_with HTTPS support_. The simplest option is [ngrok](https://ngrok.io) with a free account. Create an account, configure
+the ngrok client as specified by their documentation, then run:
+
+```bash
+$ ngrok http 8000
+```
+
+(or the correct port if Django assigned another one). Finally, you need to add the ngrok URL to the Django configuration
+for Django not to reject requests from this unknown domain. Add the ngrok _domain_ (without `https://`) to the `host`
+entry of the `django` section of the `secrets.toml` file.
+
 ## Commands
 
 We added a few commands to the Django commands system. Add `--help` for help on each command.
 
 - `./manage.py syncschedules` — Loads scheduled streams from Twitch and Google Calendar. _Every 15 min in production._
+- `./manage.py subscribe` — Subscribes not-yet-subscribed streamers to EventSub-based Twitch live updates. _Every 15 min
+  in production, to renew Twitch-revoked subscriptions._
+- `./manage.py unsubscribe [streamer_twitch_id…]` — Unsubscribes the given (or all, if none given) streamers from
+  EventSub-based Twitch live updates.

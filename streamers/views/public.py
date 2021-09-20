@@ -21,9 +21,11 @@ class HomeView(TemplateView):
         # We want scheduled stream that were not started yet (i.e.
         # the corresponding streamer is not live) and where the *end* time
         # is in the future (so streams starting late are still displayed).
-        context["scheduled"] = ScheduledStream.objects.filter(streamer__live=False, end__gte=now).prefetch_related(
-            "streamer"
-        ).order_by('start')[:4]
+        context["scheduled"] = (
+            ScheduledStream.objects.filter(streamer__live=False, end__gte=now)
+            .prefetch_related("streamer")
+            .order_by("start")[:4]
+        )
 
         # We try to associate live streamers with the corresponding planned stream, so we can display
         # the end time.

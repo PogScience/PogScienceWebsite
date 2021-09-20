@@ -40,11 +40,16 @@ SECRET_KEY = secrets.get("django", {}).get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
+
+if secrets["django"].get("host"):
+    ALLOWED_HOSTS.append(secrets["django"]["host"])
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+HOST = secrets["django"].get("host", "localhost:8000")
 
 # Application definition
 
