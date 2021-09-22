@@ -10,13 +10,14 @@ toml = "*"
 social-auth-app-django = "*"
 django-bulma-form-templates = "*"
 django-webpack-loader = "*"
-python-twitch-client = "*"
 pillow = "*"
 requests = "*"
 pytz = "*"
 python-dateutil = "*"
 django-click = "*"
 google-api-python-client = "*"
+setuptools = "*"
+python-twitch-client = {git = "https://github.com/tsifrer/python-twitch-client"}
 
 [dev-packages]
 

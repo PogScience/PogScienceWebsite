@@ -86,3 +86,7 @@ We added a few commands to the Django commands system. Add `--help` for help on 
   in production, to renew Twitch-revoked subscriptions._
 - `./manage.py unsubscribe [streamer_twitch_id…]` — Unsubscribes the given (or all, if none given) streamers from
   EventSub-based Twitch live updates.
+- `./manage.py synclivestreams` — Updates viewers count and stream preview for every online stream. Does nothing if no
+  one is online. _Every 2 min in production._
+
+_Scheduled tasks shall not be executed at the same time in production._

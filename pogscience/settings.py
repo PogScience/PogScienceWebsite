@@ -223,3 +223,5 @@ POG_SCHEDULE = {
     "GOOGLE_CALENDAR_ID": secrets["google"].get("calendar_id"),
     "GOOGLE_API_KEY": secrets["google"].get("api_key"),
 }
+
+POG_PREVIEWS = {"WIDTH": 1280, "HEIGHT": 720}

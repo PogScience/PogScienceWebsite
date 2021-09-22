@@ -3,6 +3,7 @@ from datetime import timedelta
 from io import BytesIO
 
 import requests
+from django.conf import settings
 from django.contrib import admin
 from django.core import files
 from django.db import models
@@ -137,6 +138,12 @@ class Streamer(models.Model):
         null=True,
         blank=True,
     )
+    live_spectators = models.PositiveIntegerField(
+        verbose_name=_("spectateurs"),
+        blank=True,
+        null=True,
+        default=None,
+    )
 
     def __str__(self):
         return self.name
@@ -144,6 +151,20 @@ class Streamer(models.Model):
     @property
     def twitch_url(self):
         return f"https://twitch.tv/{self.twitch_login}"
+
+    @staticmethod
+    def _download_and_store_image(url, field):
+        if not url:
+            return
+
+        res_image = requests.get(url)
+        if not res_image.ok:
+            return
+
+        image = BytesIO()
+        image.write(res_image.content)
+        filename = f"image{os.path.splitext(url)[1]}"
+        field.save(filename, files.File(image))
 
     def update_from_twitch_data(self, twitch_data):
         """
@@ -159,21 +180,21 @@ class Streamer(models.Model):
 
         self.description = twitch_data["description"]
 
-        def _download_and_store_image(key, field):
-            if not twitch_data[key]:
-                return
+        self._download_and_store_image(twitch_data.get("profile_image_url"), self.profile_image)
+        self._download_and_store_image(twitch_data.get("offline_image_url"), self.background_image)
 
-            res_image = requests.get(twitch_data[key])
-            if not res_image.ok:
-                return
+    def update_stream_from_twitch_data(self, twitch_data):
+        self.live_title = twitch_data["title"]
+        self.live_game_name = twitch_data["game_name"]
+        self.live_spectators = twitch_data["viewer_count"]
 
-            image = BytesIO()
-            image.write(res_image.content)
-            filename = f"image{os.path.splitext(twitch_data[key])[1]}"
-            field.save(filename, files.File(image))
+        thumbnail = (
+            twitch_data["thumbnail_url"]
+            .replace("{width}", str(settings.POG_PREVIEWS["WIDTH"]))
+            .replace("{height}", str(settings.POG_PREVIEWS["HEIGHT"]))
+        )
 
-        _download_and_store_image("profile_image_url", self.profile_image)
-        _download_and_store_image("offline_image_url", self.background_image)
+        self._download_and_store_image(thumbnail, self.live_preview)
 
 
 class EventSubSubscription(models.Model):
