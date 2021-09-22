@@ -96,7 +96,7 @@ def command(reset):
     twitch_events = []
     with click.progressbar(
         streamers,
-        label="Loading scheduled streams from Twitch…",
+        label=click.style("Loading scheduled streams from Twitch...", fg="cyan", bold=True),
         item_show_func=lambda streamer: streamer.name if streamer is not None else None,
     ) as bar:
         for streamer in bar:
@@ -123,12 +123,12 @@ def command(reset):
             except HTTPError:
                 pass  # no schedule for this streamer, oh well.
 
-    click.echo(f"{len(twitch_events)} scheduled streams loaded from Twitch.\n")
+    click.echo(f"  {len(twitch_events)} scheduled streams loaded from Twitch.")
 
     if settings.POG_SCHEDULE["GOOGLE_API_KEY"] and settings.POG_SCHEDULE["GOOGLE_CALENDAR_ID"]:
 
         # We then load Google Calendar events; we'll merge them with the former.
-        click.echo("Loading scheduled streams from Google Calendar…")
+        click.secho("Loading scheduled streams from Google Calendar...", fg="cyan", bold=True, nl=False)
         gcal_service = discovery.build("calendar", "v3", developerKey=settings.POG_SCHEDULE["GOOGLE_API_KEY"])
 
         timeMin = now.isoformat()
@@ -149,6 +149,7 @@ def command(reset):
 
         gcal_raw_events = gcal_events_response.get("items", [])
         gcal_events = []
+        gcal_errors = []
 
         # We try to associate events with streamers, matching channels names in the events
         # We first try to match the link in the event location, then at the beginning
@@ -189,7 +190,7 @@ def command(reset):
                     break
 
             if not event_streamers:
-                click.echo(f"** Unable to extract streamer from event “{event['summary']}”: ignored", err=True)
+                gcal_errors.append(event['summary'])
                 continue
 
             for name in event_streamer_names_in_summary:
@@ -212,7 +213,10 @@ def command(reset):
                 }
             )
 
-        click.echo(f"{len(gcal_raw_events)} scheduled streams loaded from Google Calendar.\n")
+        click.secho(" OK ", fg="green", bold=True)
+        click.echo(f"  {len(gcal_raw_events)} scheduled streams loaded from Google Calendar.")
+        for error in gcal_errors:
+            click.echo(f"  Unable to extract streamer from event “{error}”: ignored.", err=True)
 
         # For each Google Calendar event, we try to lookup for a Twitch event from
         # the same streamer (testing each potential one, the most likely first)
@@ -224,7 +228,7 @@ def command(reset):
             twitch_events_by_streamer[event["streamer"].twitch_login].append(event)
 
         unique_gcal_events = []
-        with click.progressbar(gcal_events, label="Merging Twitch and Google Calendar scheduled streams…") as bar:
+        with click.progressbar(gcal_events, label=click.style("Merging Twitch and Google Calendar scheduled streams...", fg="cyan", bold=True)) as bar:
             for gcal_event in bar:
                 merged = False
                 for ps in gcal_event["__potential_streamers"]:
@@ -251,19 +255,20 @@ def command(reset):
 
         twitch_events.extend(unique_gcal_events)
 
-        click.echo(f"{len(twitch_events)} scheduled streams loaded from both sources, after merge.\n")
+        click.echo(f"  {len(twitch_events)} scheduled streams loaded from both sources, after merge.")
 
     else:
-        click.echo("No streams loaded from Google Calendar: API key or calendar ID not configured.\n")
+        click.echo("No streams loaded from Google Calendar: API key or calendar ID not configured.")
 
     # Starting here, we'll start to store the new schedules into the database.
     # Hence, we start a transaction so the update is consistant.
     with transaction.atomic():
         if reset:
-            click.echo("Removing existing scheduled streams…")
+            click.secho("Removing existing scheduled streams...", fg="cyan", bold=True, nl=False)
             ScheduledStream.objects.filter(end__gte=now).delete()
+            click.secho(" OK", fg="green", bold=True)
 
-        click.echo("Fetching existing scheduled streams…")
+        click.secho("Fetching existing scheduled streams...", fg="cyan", bold=True, nl=False)
 
         stored_scheduled = ScheduledStream.objects.filter(end__gte=now)
         scheduled_by_source_id = {}
@@ -274,6 +279,8 @@ def command(reset):
             scheduled_by_source_id[
                 (scheduled.google_calendar_event_id, scheduled.start, scheduled.streamer.twitch_id)
             ] = scheduled
+
+        click.secho(" OK", fg="green", bold=True)
 
         def has_stored_schedule(schedule):
             return (
@@ -296,7 +303,7 @@ def command(reset):
 
         scheduled_to_update = []
 
-        with click.progressbar(twitch_events, label="Saving scheduled streams to database…") as bar:
+        with click.progressbar(twitch_events, label=click.style("Saving scheduled streams to database...", fg="cyan", bold=True)) as bar:
             for event in bar:
                 # The scheduled stream already exist in the database
                 if has_stored_schedule(event):
@@ -328,7 +335,7 @@ def command(reset):
                     google_calendar_event_id=event["google_calendar_event_id"],
                 ).save()
 
-        click.echo("Updating existing scheduled streams…")
+        click.secho("Updating existing scheduled streams...", fg="cyan", bold=True, nl=False)
         ScheduledStream.objects.bulk_update(
             scheduled_to_update,
             fields=[
@@ -343,10 +350,12 @@ def command(reset):
             ],
         )
 
+        click.secho(" OK", fg="green", bold=True)
+
         # We delete streams in the future that were not collected by the script,
         # but are stored in the database: these streams existed before but are now
         # deleted, so we delete them in our database too.
-        click.echo("Deleting removed scheduled streams…", nl=False)
+        click.secho("Deleting removed scheduled streams...", fg="cyan", bold=True, nl=False)
         twitch_segments_ids = [s["twitch_segment_id"] for s in twitch_events]
         google_calendar_event_ids = [s["google_calendar_event_id"] for s in twitch_events]
         deleted, _ = (
@@ -357,6 +366,5 @@ def command(reset):
             )
             .delete()
         )
-        click.echo(f" {deleted} deleted.")
-
-    click.echo(click.style("\nDone.", fg="green"))
+        click.secho(" OK ", fg="green", bold=True)
+        click.echo(f"  {deleted} removed scheduled streams deleted.")
