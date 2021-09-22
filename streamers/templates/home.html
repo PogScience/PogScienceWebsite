@@ -31,16 +31,16 @@
                     {% if live_streamers|length_is:"1" %}
                         {% with streamer=live_streamers|first %}
                             <h2 class="title">{{ streamer.name }} est en live !</h2>
-                            <p class="subtitle">Rejoignez 84 spectateurs sur {{ streamer.live_game_name }}</p>
+                            <p class="subtitle">Rejoignez {{ streamer.live_spectators|apnumber }} spectateurs sur {{ streamer.live_game_name }}</p>
                         {% endwith %}
                     {% elif live_streamers|length_is:"2" %}
                         {% with streamer1=live_streamers|first streamer2=live_streamers.1 %}
                             <h2 class="title">{{ streamer1.name }} et {{ streamer2.name }} sont en live !</h2>
-                            <p class="subtitle">Rejoignez 84 spectateurs</p>
+                            <p class="subtitle">Rejoignez {{ streamer1.live_spectators|add:streamer2.live_spectators|apnumber }} spectateurs</p>
                         {% endwith %}
                     {% elif live_streamers|length %}
                         <h2 class="title">Il y a {{ live_streamers.count|apnumber }} streamers en live !</h2>
-                        <p class="subtitle">Rejoignez 84 spectateurs sur {{ streamer.live_game_name }}</p>
+                        <p class="subtitle">Rejoignez {{ all_spectators_count|apnumber }} spectateurs !</p>
                     {% else %}
                         <h2 class="title">Personne n'est en live pour le moment…</h2>
                         <p class="subtitle">…mais de nouveaux streams arrivent&nbsp;!</p>
@@ -60,7 +60,7 @@
             </header>
 
             {% for streamer in live_streamers %}
-                {% include "live-stream.part.html" with streamer=streamer solo=True %}
+                {% include "live-stream.part.html" with streamer=streamer solo=True hide_spectators=live_streamers|length_is:"1" %}
             {% endfor %}
 
             {% if live_streamers %}

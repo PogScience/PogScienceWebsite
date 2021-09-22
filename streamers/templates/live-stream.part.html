@@ -14,8 +14,11 @@
                 <img src="{{ MEDIA_URL }}{{ streamer.profile_image }}" alt="{{ streamer.name }}" />
             </figure>
             <span class="streamer-name">{{ streamer.name }}</span>
-            {% if streamer.live_game_name %}<span class="streamer-game">&nbsp;&centerdot;&nbsp;{{ streamer.live_game_name }}</span>{% endif %}
+            {% if streamer.live_game_name %}<span class="streamer-game">&centerdot;&nbsp;{{ streamer.live_game_name }}</span>{% endif %}
         </div>
+        {% if not hide_spectators and streamer.live_spectators %}
+            <div class="game">{% blocktrans count count=streamer.live_spectators %}{{ count }} spectateur{% plural %}{{ count }} spectateurs{% endblocktrans %}</div>
+        {% endif %}
 
         <footer>
             {% if streamer.live %}
