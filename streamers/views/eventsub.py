@@ -95,7 +95,7 @@ class EventSubIngestView(View):
     def notification_update(self) -> HttpResponse:
         streamer = self.sub.streamer
         streamer.live_title = self.event["title"]
-        streamer.live_game_name = self.event['category_name']
+        streamer.live_game_name = self.event["category_name"]
         streamer.save()
 
         return HttpResponse(status=HTTPStatus.NO_CONTENT)

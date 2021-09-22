@@ -7,10 +7,6 @@ from streamers.models import ScheduledStream, Streamer
 
 class HomeView(TemplateView):
     template_name = "home.html"
-    extra_context = {
-        "streamers": Streamer.objects.all(),
-        "live_streamers": Streamer.objects.filter(live=True),
-    }
 
     def get_context_data(self):
         now = timezone.now()
@@ -37,6 +33,8 @@ class HomeView(TemplateView):
             )
         )
 
-        context["now"] = now
+        context["all_spectators_count"] = sum(
+            [streamer.live_spectators for streamer in context["live_streamers"] if streamer.live_spectators]
+        )
 
         return context
