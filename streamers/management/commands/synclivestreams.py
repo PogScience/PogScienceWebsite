@@ -1,18 +1,28 @@
 import djclick as click
 from django.db import transaction
+from django.db.models import Q
 
 from pogscience.twitch import get_twitch_client
 from streamers.models import Streamer
 
 
 @click.command()
+@click.option("--full", is_flag=True, help="Checks for online/offline status for every streamer, too.")
 @transaction.atomic
-def command():
+def command(full):
     """
     Updates the live stream preview (and stream data) for live streamers.
     If no one is live, outputs nothing.
     """
     client = get_twitch_client()
+
+    if full:
+        click.secho(f"Checking for streams status (--full)...", fg="cyan", bold=True, nl=False)
+        streams = client.get_streams(user_ids=[streamer.twitch_id for streamer in Streamer.objects.all()])
+        online_streamers_ids = [int(stream["user_id"]) for stream in streams]
+        Streamer.objects.filter(twitch_id__in=online_streamers_ids).update(live=True)
+        Streamer.objects.filter(~Q(twitch_id__in=online_streamers_ids)).update(live=False)
+        click.secho(" OK", fg="green", bold=True)
 
     streamers = {str(streamer.twitch_id): streamer for streamer in Streamer.objects.filter(live=True)}
     if not streamers:
