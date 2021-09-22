@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n humanize %}
+{% load i18n %}
 
 {% block content %}
     <section class="hero is-medium is-primary">
@@ -25,54 +25,10 @@
     {# if il y a ou des streamers en live ou des événements à venir #}
     {# S'il n'y a personne en live et rien à venir, inutile d'afficher quoique ce soit #}
     <section class="section right-now">
-        <div class="container">
-            <header>
-                <div class="titles">
-                    {% if live_streamers|length_is:"1" %}
-                        {% with streamer=live_streamers|first %}
-                            <h2 class="title">{{ streamer.name }} est en live !</h2>
-                            <p class="subtitle">Rejoignez {{ streamer.live_spectators|apnumber }} spectateurs sur {{ streamer.live_game_name }}</p>
-                        {% endwith %}
-                    {% elif live_streamers|length_is:"2" %}
-                        {% with streamer1=live_streamers|first streamer2=live_streamers.1 %}
-                            <h2 class="title">{{ streamer1.name }} et {{ streamer2.name }} sont en live !</h2>
-                            <p class="subtitle">Rejoignez {{ streamer1.live_spectators|add:streamer2.live_spectators|apnumber }} spectateurs</p>
-                        {% endwith %}
-                    {% elif live_streamers|length %}
-                        <h2 class="title">Il y a {{ live_streamers.count|apnumber }} streamers en live !</h2>
-                        <p class="subtitle">Rejoignez {{ all_spectators_count|apnumber }} spectateurs !</p>
-                    {% else %}
-                        <h2 class="title">Personne n'est en live pour le moment…</h2>
-                        <p class="subtitle">…mais de nouveaux streams arrivent&nbsp;!</p>
-                    {% endif %}
-                </div>
-                <aside>
-                    <p>
-                        <a href="#" class="button is-outlined is-white">
-                            <span>{% trans "Calendrier des streams" %}</span>
-                            <span class="icon is-small">
-                          <span class="fas fa-angle-right"></span>
-                        </span>
-                        </a>
-                    </p>
-                    <p class="is-timezone">Heure de {{ TIME_ZONE_CITY }}</p>
-                </aside>
-            </header>
-
-            {% for streamer in live_streamers %}
-                {% include "live-stream.part.html" with streamer=streamer solo=True hide_spectators=live_streamers|length_is:"1" %}
-            {% endfor %}
-
-            {% if live_streamers %}
-                <div class="divider">{% trans "Mais aussi, bientôt sur Twitch" %}</div>
-            {% endif %}
-
-            <div class="columns is-multiline">
-                {% for stream in scheduled %}
-                    <div class="column is-6">
-                        {% include "scheduled-stream.part.html" with stream=stream %}
-                    </div>
-                {% endfor %}
+        <div class="container" id="js-home-live-and-upcoming" data-content-url="{% url "streamers:home-part-live-upcoming" %}">
+            <div class="is-loading">
+                <div class="is-loader"></div>
+                <div>{% trans "Chargement…" %}</div>
             </div>
         </div>
     </section>

@@ -1,5 +1,7 @@
 from django.db.models import OuterRef, Subquery
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 
 from streamers.models import ScheduledStream, Streamer
@@ -7,12 +9,19 @@ from streamers.models import ScheduledStream, Streamer
 
 class HomeView(TemplateView):
     template_name = "home.html"
+    extra_context = {
+        "streamers": Streamer.objects.all()
+    }
+
+
+@method_decorator(cache_page(60), name="dispatch")
+class HomeLiveAndUpcomingPartView(TemplateView):
+    template_name = "live-and-upcoming.html"
 
     def get_context_data(self):
         now = timezone.now()
 
-        context = super(HomeView, self).get_context_data()
-        context["streamers"] = Streamer.objects.all()
+        context = super(HomeLiveAndUpcomingPartView, self).get_context_data()
 
         # We want scheduled stream that were not started yet (i.e.
         # the corresponding streamer is not live) and where the *end* time

@@ -93,6 +93,15 @@ section.right-now
   background-color: $grey-dark
   color: $white
 
+  .container > .is-loading
+    display: flex
+    align-items: center
+    justify-content: center
+
+    .is-loader
+      @include loader
+      margin-right: .4rem
+
   header
     display: flex
     flex-direction: row

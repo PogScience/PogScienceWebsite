@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const streamersList = document.getElementById("js-streamers-list")
+    if (!streamersList) return
+
     const streamersModal = document.getElementById("js-add-streamers-modale")
     const streamersForm = document.getElementById("js-add-streamers-form")
     const streamersAddButton = streamersForm.querySelector("button[type=submit]")
