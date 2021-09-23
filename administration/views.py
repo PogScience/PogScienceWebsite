@@ -58,6 +58,10 @@ class AddStreamersView(PermissionRequiredMixin, LoginRequiredMixin, FormView):
                 streamer_model.update_from_twitch_data(streamer)
                 streamer_model.save()
 
+                streamer_model.subscribe_to_eventsub()
+
+            Streamer.full_twitch_sync()
+
         return HttpResponse(status=HTTPStatus.CREATED)
 
 
