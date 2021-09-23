@@ -41,6 +41,9 @@ $ make run      # Run the server in development mode, and webpack in watch mode.
 The port will be printed on the console. It is usually [`localhost:8000`](http://localhost:8000). For the Twitch login
 to work (see below), you have to use the `localhost` URL.
 
+We use [`black`](https://github.com/psf/black) to format the Python code. `make install` above will install a pre-commit
+hook to reformat the whole projet at each commit. If it didn't, run `pre-commit install` from within the virtualenv.
+
 ### Production deployment
 
 TODO, but: Ansible. 🔥

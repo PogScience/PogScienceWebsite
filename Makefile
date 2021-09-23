@@ -4,6 +4,7 @@ install: install-back install-front ## Install the Python and NodeJS environment
 
 install-back: ## Install the Python environment.
 	pipenv install --dev
+	pipenv run pre-commit install
 
 install-front: ## Install the front-end dependencies.
 	npm install --save-dev

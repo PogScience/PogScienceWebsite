@@ -20,6 +20,7 @@ setuptools = "*"
 python-twitch-client = {git = "https://github.com/tsifrer/python-twitch-client"}
 
 [dev-packages]
+pre-commit = "*"
 
 [requires]
 python_version = "3.9"
