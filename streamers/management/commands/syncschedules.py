@@ -190,7 +190,7 @@ def command(reset):
                     break
 
             if not event_streamers:
-                gcal_errors.append(event['summary'])
+                gcal_errors.append(event["summary"])
                 continue
 
             for name in event_streamer_names_in_summary:
@@ -228,7 +228,10 @@ def command(reset):
             twitch_events_by_streamer[event["streamer"].twitch_login].append(event)
 
         unique_gcal_events = []
-        with click.progressbar(gcal_events, label=click.style("Merging Twitch and Google Calendar scheduled streams...", fg="cyan", bold=True)) as bar:
+        with click.progressbar(
+            gcal_events,
+            label=click.style("Merging Twitch and Google Calendar scheduled streams...", fg="cyan", bold=True),
+        ) as bar:
             for gcal_event in bar:
                 merged = False
                 for ps in gcal_event["__potential_streamers"]:
@@ -303,7 +306,9 @@ def command(reset):
 
         scheduled_to_update = []
 
-        with click.progressbar(twitch_events, label=click.style("Saving scheduled streams to database...", fg="cyan", bold=True)) as bar:
+        with click.progressbar(
+            twitch_events, label=click.style("Saving scheduled streams to database...", fg="cyan", bold=True)
+        ) as bar:
             for event in bar:
                 # The scheduled stream already exist in the database
                 if has_stored_schedule(event):
