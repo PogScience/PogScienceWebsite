@@ -1,4 +1,5 @@
 import re
+import string
 
 from datetime import datetime
 from pprint import pprint
@@ -47,12 +48,12 @@ def command(reset):
         "Le",
         "Petit",
         "Professeur",
-        "Q",
-        "T",
         "Hell",
         "Tout",
         "Se",
     ]
+    forbidden_solo_detection_words.extend(string.ascii_lowercase)
+    forbidden_solo_detection_words.extend(string.ascii_uppercase)
 
     for streamer in streamers:
         words_caps = re_split_by_caps.findall(streamer.name)
@@ -165,6 +166,13 @@ def command(reset):
         for event in gcal_raw_events:
             start = dp.parse(event["start"].get("dateTime", event["start"].get("date")))
             end = dp.parse(event["end"].get("dateTime", event["end"].get("date")))
+
+            if timezone.is_naive(start):
+                start = timezone.make_aware(start)
+
+            if timezone.is_naive(end):
+                end = timezone.make_aware(end)
+
             event_streamers = []
             event_streamer_names_in_summary = []
             event_summary = event["summary"]
