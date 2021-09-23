@@ -1,17 +1,23 @@
 import os
 from datetime import timedelta
 from io import BytesIO
+from urllib.error import HTTPError
+from uuid import UUID
 
 import requests
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth.models import AbstractUser
 from django.core import files
+from django.core.management.utils import get_random_secret_key
 from django.db import models
+from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractUser
 
 from pogscience.storage import OverwriteStorage
+from pogscience.twitch import get_twitch_client
 
 
 class User(AbstractUser):
@@ -60,6 +66,8 @@ class Streamer(models.Model):
         verbose_name = _("streamer")
         verbose_name_plural = _("streamers")
         ordering = ["name", "twitch_login"]
+
+    EVENTSUB_SUBSCRIPTIONS = ["stream.online", "stream.offline", "channel.update"]
 
     user = models.OneToOneField(
         User,
@@ -195,6 +203,79 @@ class Streamer(models.Model):
         )
 
         self._download_and_store_image(thumbnail, self.live_preview)
+
+    def subscribe_to_eventsub(self):
+        """
+        Subscribes to EventSub subscriptions listed in `Streamer.EVENTSUB_SUBSCRIPTIONS`.
+
+        :return: With event_type being a string containing the corresponding eventsub event type subscribed to, returns
+        a list with, for each subscription:
+        - (event_type, True) if a subscription was successfully created;
+        - (event_type, False) if a subscription already existed for that event;
+        - (event_type, e) with e being an HTTPError, if an error occurred.
+        """
+        client = get_twitch_client()
+        result = []
+
+        for event_type in self.EVENTSUB_SUBSCRIPTIONS:
+            if EventSubSubscription.objects.filter(streamer=self, type=event_type).exists():
+                result.append((event_type, False))
+                continue
+
+            try:
+                secret = get_random_secret_key()
+                sub = client.eventsub_subscribe(
+                    event_type=event_type,
+                    callback_url=f"https://{settings.HOST}{reverse('streamers:eventsub-ingest')}",
+                    secret=secret,
+                    event_condition={"broadcaster_user_id": str(self.twitch_id)},
+                )[0]
+
+                EventSubSubscription(
+                    streamer=self,
+                    type=sub["type"],
+                    uuid=UUID(sub["id"]),
+                    secret=secret,
+                    status=EventSubSubscription.PENDING,
+                ).save()
+
+                result.append((event_type, True))
+
+            except HTTPError as e:
+                result.append((event_type, e))
+
+        return result
+
+    def unsubscribe_from_eventsub(self):
+        """
+        Unsubscribes from every known subscription for this streamer.
+
+        :return: With event_type being a string containing the corresponding eventsub event type subscribed to, returns
+        a list with, for each subscription:
+        - (event_type, True) if the subscription was successfully removed;
+        - (event_type, e) with e being an HTTPError, if an error occurred.
+        """
+        client = get_twitch_client()
+        result = []
+
+        for sub in EventSubSubscription.objects.filter(streamer=self):
+            try:
+                client.eventsub_delete_subscription(uuid=sub.uuid)
+                sub.delete()
+                result.append((sub.type, True))
+            except HTTPError as e:
+                result.append((sub.type, e))
+
+        return result
+
+    @classmethod
+    def full_twitch_sync(cls):
+        """Checks for every channel current live status, and updates every registered channel accordingly."""
+        client = get_twitch_client()
+        streams = client.get_streams(user_ids=[streamer.twitch_id for streamer in cls.objects.all()])
+        online_streamers_ids = [int(stream["user_id"]) for stream in streams]
+        cls.objects.filter(twitch_id__in=online_streamers_ids).update(live=True)
+        cls.objects.filter(~Q(twitch_id__in=online_streamers_ids)).update(live=False)
 
 
 class EventSubSubscription(models.Model):
