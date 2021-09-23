@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n cache %}
 
 {% block content %}
     <section class="hero is-medium is-primary">
@@ -22,13 +22,43 @@
         </div>
     </section>
 
-    {# if il y a ou des streamers en live ou des événements à venir #}
-    {# S'il n'y a personne en live et rien à venir, inutile d'afficher quoique ce soit #}
     <section class="section right-now">
-        <div class="container" id="js-home-live-and-upcoming" data-content-url="{% url "streamers:home-part-live-upcoming" %}">
+        <div class="container" id="js-home-live-and-upcoming"
+             data-content-url="{% url "streamers:home-part-live-upcoming" %}">
             <div class="is-loading">
                 <div class="is-loader"></div>
                 <div>{% trans "Chargement…" %}</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section all-streamers">
+        <div class="container">
+            <div class="columns is-multiline is-8">
+
+                {% for streamer in streamers %}
+                    <div class="column is-half">
+                        <article class="streamer">
+                            <header>
+                                <figure>
+                                    <a href="{{ streamer.twitch_url }}">
+                                        <img src="{{ MEDIA_URL }}{{ streamer.profile_image }}"
+                                             alt="{{ streamer.name }}"/>
+                                    </a>
+                                </figure>
+                                <h3><a href="{{ streamer.twitch_url }}">{{ streamer.name }}</a></h3>
+                            </header>
+
+                            <ul class="streamers-network">
+                                <li><a href="#"><span class="fab fa-twitch"></span></a></li>
+                                <li><a href="#"><span class="fab fa-twitter"></span></a></li>
+                                <li><a href="#"><span class="fab fa-instagram"></span></a></li>
+                            </ul>
+
+                            <p>{{ streamer.description }}</p>
+                        </article>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </section>

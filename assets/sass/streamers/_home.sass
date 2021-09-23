@@ -89,6 +89,7 @@
               font-size: .8rem
               color: $white
 
+
 section.right-now
   background-color: $grey-dark
   color: $white
@@ -200,3 +201,39 @@ section.right-now
 
     &:hover .stream-box-preview button
         opacity: 1
+
+
+section.all-streamers
+  .container
+    padding: 0 5rem
+
+  article.streamer
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-items: center
+
+    text-align: center
+
+    margin: 3rem 0
+
+    header
+      figure
+        img
+          width: 128px
+          height: 128px
+          border-radius: 314159265px
+      h3
+        font-size: $size-3
+
+        a
+          color: $black
+
+    ul.streamers-network
+      display: flex
+      li
+        margin: 0 .5rem
+
+    p
+      margin: 1rem 0
+      font-size: $size-5

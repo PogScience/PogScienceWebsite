@@ -2,7 +2,6 @@ import fetch from "../common/fetch"
 
 document.addEventListener("DOMContentLoaded", () => {
     const streamsContainer = document.getElementById("js-home-live-and-upcoming")
-
     if (!streamsContainer) return
 
     const streamsLiveURL = streamsContainer.getAttribute("data-content-url")
