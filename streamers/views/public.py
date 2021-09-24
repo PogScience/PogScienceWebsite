@@ -25,7 +25,7 @@ class HomeView(TemplateView):
         return context
 
 
-@method_decorator(cache_page(60), name="dispatch")
+@method_decorator(cache_page(30), name="dispatch")
 class HomeLiveAndUpcomingPartView(TemplateView):
     template_name = "live-and-upcoming.html"
 
