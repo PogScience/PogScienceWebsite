@@ -36,7 +36,7 @@
 
     <div class="stream-box-preview">
         <figure class="image is-16by9 is-fullwidth">
-            <img src="{{ MEDIA_URL }}{{ streamer.live_preview }}" alt="{% trans "Aperçu du live" %}">
+            <img src="{{ MEDIA_URL }}{{ streamer.live_preview|default:streamer.background_image }}" alt="{% trans "Aperçu du live" %}">
             <button class="button is-twitch is-medium" disabled data-tooltip="{% trans "À venir…" %}">
                 <span class="icon"><span class="fas fa-bolt"></span></span>
                 <span>RAID</span>

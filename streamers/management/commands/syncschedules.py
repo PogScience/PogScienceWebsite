@@ -1,9 +1,6 @@
 import re
 import string
 
-from datetime import datetime
-from pprint import pprint
-
 import dateutil.parser as dp
 import djclick as click
 from django.conf import settings

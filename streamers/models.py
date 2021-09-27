@@ -12,6 +12,8 @@ from django.core import files
 from django.core.management.utils import get_random_secret_key
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -172,7 +174,7 @@ class Streamer(models.Model):
         image = BytesIO()
         image.write(res_image.content)
         filename = f"image{os.path.splitext(url)[1]}"
-        field.save(filename, files.File(image))
+        field.save(filename, files.File(image), save=False)
 
     def update_from_twitch_data(self, twitch_data):
         """
@@ -192,6 +194,11 @@ class Streamer(models.Model):
         self._download_and_store_image(twitch_data.get("offline_image_url"), self.background_image)
 
     def update_stream_from_twitch_data(self, twitch_data):
+        """
+        Updates the current stream using the data returned by Twitch. Does not
+        save the instance.
+        :param twitch_data: The Twitch data: https://dev.twitch.tv/docs/api/reference#get-streams
+        """
         self.live_title = twitch_data["title"]
         self.live_game_name = twitch_data["game_name"]
         self.live_spectators = twitch_data["viewer_count"]
@@ -203,6 +210,19 @@ class Streamer(models.Model):
         )
 
         self._download_and_store_image(thumbnail, self.live_preview)
+
+    def update_stream(self):
+        """
+        Updates this streamer's current stream (if the streamer is live and
+        Twitch returns a stream for it).
+        """
+        client = get_twitch_client()
+        streams = client.get_streams(user_ids=[self.twitch_id])
+        try:
+            self.update_stream_from_twitch_data(streams[0])
+        except IndexError:
+            # The streamer is not live: Twitch returned nothing about its stream.
+            pass
 
     def subscribe_to_eventsub(self):
         """
@@ -276,6 +296,11 @@ class Streamer(models.Model):
         online_streamers_ids = [int(stream["user_id"]) for stream in streams]
         cls.objects.filter(twitch_id__in=online_streamers_ids).update(live=True)
         cls.objects.filter(~Q(twitch_id__in=online_streamers_ids)).update(live=False)
+
+
+@receiver(pre_save, sender=Streamer)
+def update_stream_when_streamer_goes_live(sender, instance: Streamer, **kwargs):
+    instance.update_stream()
 
 
 class EventSubSubscription(models.Model):
