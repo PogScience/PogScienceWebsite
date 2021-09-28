@@ -80,11 +80,19 @@ class StreamerAdmin(admin.ModelAdmin):
 
     @admin.display(description="Name", ordering="twitch_login")
     def name_with_image(self, instance: Streamer):
+        colours_boxes = ""
+        for colour in instance.colours_hex:
+            colours_boxes += format_html(
+                '<span style="display: inline-block; width: .9em; height: .9em; border-radius: 2px; '
+                'background-color: {}; margin: .4rem .2rem 0 0;"></span>',
+                colour,
+            )
+
         return format_html(
             """
             <div style="display: flex; flex-direction: row; align-items: center;">
-                <figure style="margin: 4px"><img src="{}{}" alt="{}" style="border-radius: 31415926535px; width: 48px; height: 48px;" /></figure>
-                <p style="flex: 4">{}<br /><span style="color: #ccc; font-weight: normal;">@{}</span></p>
+                <figure style="margin: 4px"><img src="{}{}" alt="{}" style="border-radius: 31415926535px; width: 60px; height: 60px;" /></figure>
+                <p style="flex: 4">{}<br /><span style="color: #ccc; font-weight: normal;">@{}</span><br/>{}</p>
             </div>
             """,
             settings.MEDIA_URL,
@@ -92,6 +100,7 @@ class StreamerAdmin(admin.ModelAdmin):
             instance.name,
             instance.name,
             instance.twitch_login,
+            mark_safe(colours_boxes),
         )
 
     @admin.display(description="Abonnements EventSub")

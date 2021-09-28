@@ -34,7 +34,7 @@
         </footer>
     </a>
 
-    <div class="stream-box-preview">
+    <div class="stream-box-preview" style="--streamer-colour-1: {{ streamer.colours_hex.0 }}; --streamer-colour-2: {{ streamer.colours_hex.1 }}">
         <figure class="image is-16by9 is-fullwidth">
             <img src="{{ MEDIA_URL }}{{ streamer.live_preview|default:streamer.background_image }}" alt="{% trans "Aperçu du live" %}">
             <button class="button is-twitch is-medium" disabled data-tooltip="{% trans "À venir…" %}">

@@ -1,3 +1,5 @@
+import binascii
+import colorsys
 import os
 from datetime import timedelta
 from io import BytesIO
@@ -20,6 +22,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pogscience.storage import OverwriteStorage
 from pogscience.twitch import get_twitch_client
+from streamers.utils import extract_main_colours, grouper
 
 
 class User(AbstractUser):
@@ -119,9 +122,22 @@ class Streamer(models.Model):
         null=True,
         blank=True,
     )
+    _colours = models.CharField(
+        verbose_name=_("couleurs"),
+        help_text=_(
+            "Liste de trois couleurs principales à utiliser pour habiller ce/cette streamer/euse. Les valeurs "
+            "sont stockées sous la forme d'une liste de nombres flottants, dont chaque triplet forme une "
+            "couleur RGB."
+        ),
+        # max 7 chars per rgb value, three rgb tuples, and 8 comma separators
+        max_length=71,  # 7*3*3 + 8
+        blank=True,
+        null=True,
+        db_column="colours",
+    )
 
     live = models.BooleanField(
-        verbose_name=_("en live actuellement ?"),
+        verbose_name=_("en live ?"),
         help_text=_("Est-iel en live actuellement ? Mis à jour automatiquement"),
         default=False,
     )
@@ -162,6 +178,33 @@ class Streamer(models.Model):
     def twitch_url(self):
         return f"https://twitch.tv/{self.twitch_login}"
 
+    @property
+    def colours(self):
+        return list(map(tuple, grouper(map(float, self._colours.split(",")), 3)))
+
+    @colours.setter
+    def colours(self, value):
+        flat = [val for colour in value for val in colour]
+        self._colours = ",".join(map(str, flat))
+
+    @colours.deleter
+    def colours(self):
+        self._colours = None
+
+    @property
+    def colours_hex(self):
+        return list(
+            map(lambda colour: "#" + binascii.hexlify(bytearray(int(c) for c in colour)).decode("ascii"), self.colours)
+        )
+
+    @property
+    def colours_hsl(self):
+        def rgb_to_hsl(colour):
+            h, l, s = colorsys.rgb_to_hls(*map(lambda c: c / 255.0, colour))
+            return h * 360, s * 100, l * 100
+
+        return list(map(rgb_to_hsl, self.colours))
+
     @staticmethod
     def _download_and_store_image(url, field):
         if not url:
@@ -192,6 +235,7 @@ class Streamer(models.Model):
 
         self._download_and_store_image(twitch_data.get("profile_image_url"), self.profile_image)
         self._download_and_store_image(twitch_data.get("offline_image_url"), self.background_image)
+        self.update_colours()
 
     def update_stream_from_twitch_data(self, twitch_data):
         """
@@ -223,6 +267,16 @@ class Streamer(models.Model):
         except IndexError:
             # The streamer is not live: Twitch returned nothing about its stream.
             pass
+
+    def update_colours(self):
+        """
+        Updates the streamer's main colors from its profile picture. Does not
+        save the instance.
+        """
+        if not self.profile_image:
+            return
+
+        self.colours = extract_main_colours(self.profile_image.path, colours_count=3)
 
     def subscribe_to_eventsub(self):
         """
