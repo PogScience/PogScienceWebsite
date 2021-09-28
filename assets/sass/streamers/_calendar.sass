@@ -1,0 +1,45 @@
+.pogscience-calendar
+  // --fc-event-bg-color: #fff
+  // --fc-event-text-color: $black
+
+  &.fc
+    .fc-timegrid-slot
+      height: 3rem // 1.5em by default
+      border-bottom: 0 !important
+
+    .fc-timegrid-slot-label
+      vertical-align: top
+
+    .fc-v-event
+      border: none
+
+    .fc-event-main
+      padding: 0
+
+  article.event-stream
+    display: flex
+    flex-direction: column
+
+    height: 100%
+    padding: .2rem
+
+    color: $black
+
+    h3
+      flex: 10
+      font-size: $size-6
+      line-height: 1
+
+    footer
+      display: flex
+      align-items: center
+      overflow: hidden
+
+      img
+        width: 1.2em
+        height: 1.2em
+        border-radius: 314159265px
+        margin-right: .4rem
+
+      span
+        flex: 4

@@ -224,6 +224,12 @@ SOCIAL_AUTH_PIPELINE = (
     "streamers.pipeline.associate_streamer",
 )
 
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ]
+}
+
 POG_SCHEDULE = {
     "FETCH_UNTIL": timedelta(days=180),
     "GOOGLE_CALENDAR_ID": secrets["google"].get("calendar_id"),

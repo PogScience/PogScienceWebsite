@@ -1,5 +1,6 @@
 import "./index.scss"
 
 import "./common/modal"
-import "./home/streams"
+import "./streamers/home-streams"
+import "./streamers/calendar-grid"
 import "./administration/streamers"

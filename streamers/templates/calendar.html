@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load i18n cache %}
+
+{% block title %}Calendrier des streams PogScience{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div id="js-calendar-soon"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <header>
+            <h2 class="title">{% trans "Calendrier des streams" %}</h2>
+            <p class="subtitle">{% trans "Plein de belles choses à venir" %}</p>
+        </header>
+        <div
+            id="js-calendar-grid"
+            class="pogscience-calendar"
+            data-events-source="{% url "streamers:api-scheduled" %}"
+            data-streamers-resources="{% url "streamers:api-streamers-resources" %}"></div>
+    </section>
+{% endblock %}

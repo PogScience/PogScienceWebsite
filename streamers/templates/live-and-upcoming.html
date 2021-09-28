@@ -41,11 +41,11 @@
 
     <aside>
         <p>
-            <a href="#" class="button is-outlined is-white">
+            <a href="{% url "streamers:calendar" %}" class="button is-outlined is-white">
                 <span>{% trans "Calendrier des streams" %}</span>
                 <span class="icon is-small">
-                          <span class="fas fa-angle-right"></span>
-                        </span>
+                    <span class="fas fa-angle-right"></span>
+                </span>
             </a>
         </p>
         <p class="is-timezone">Heure de {{ TIME_ZONE_CITY }}</p>

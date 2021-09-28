@@ -27,11 +27,9 @@
         <div class="content has-text-centered">
             <p>
                 {% if request.user.is_anonymous %}
-                    {% if twitch.enabled %}
-                        <a href="{% url "social:begin" "twitch" %}">
-                            Se connecter avec Twitch
-                        </a>
-                    {% endif %}
+                    <a href="{% url "social:begin" "twitch" %}">
+                        Se connecter avec Twitch
+                    </a>
                 {% else %}
                     {{ request.user.first_name }} &centerdot;
                     <a href="{% url "administration:index" %}">
