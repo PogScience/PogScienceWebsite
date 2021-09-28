@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import typing
 from http import HTTPStatus
 from uuid import UUID
 
@@ -19,10 +20,10 @@ from streamers.models import EventSubSubscription
 class EventSubIngestView(View):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.request: HttpRequest = None
-        self.payload: dict = None
-        self.sub: EventSubSubscription = None
-        self.event: dict = None
+        self.request: typing.Optional[HttpRequest] = None
+        self.payload: typing.Optional[dict] = None
+        self.sub: typing.Optional[EventSubSubscription] = None
+        self.event: typing.Optional[dict] = None
 
     def check_signature(self) -> bool:
         """
@@ -115,8 +116,9 @@ class EventSubIngestView(View):
         return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
     def revocation(self) -> HttpResponse:
-        """Handles the Twitch EventSub revocation requests. The subscription will be recreated a few minutes later."""
+        """Handles the Twitch EventSub revocation requests. We re-subscribe immediately. Sorry… not sorry."""
         self.sub.delete()
+        self.sub.streamer.subscribe_to_eventsub()
         return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
     def bad_request(self) -> HttpResponse:
