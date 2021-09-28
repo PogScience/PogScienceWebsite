@@ -5,23 +5,40 @@
         {% if live_streamers|length_is:"1" %}
             {% with streamer=live_streamers|first %}
                 <h2 class="title">{{ streamer.name }} est en live !</h2>
-                <p class="subtitle">Rejoignez {{ streamer.live_spectators|apnumber }} spectateurs
-                    sur {{ streamer.live_game_name }}</p>
+                <p class="subtitle">
+                    {% blocktrans with human_count=streamer.live_spectators|apnumber game=streamer.live_game_name count count=streamer.live_spectators %}
+                        Rejoignez {{ human_count }} spectateur sur {{ game }}
+                    {% plural %}
+                        Rejoignez {{ human_count }} spectateurs sur {{ game }}
+                    {% endblocktrans %}
+                </p>
             {% endwith %}
         {% elif live_streamers|length_is:"2" %}
             {% with streamer1=live_streamers|first streamer2=live_streamers.1 %}
                 <h2 class="title">{{ streamer1.name }} et {{ streamer2.name }} sont en live !</h2>
-                <p class="subtitle">Rejoignez {{ streamer1.live_spectators|add:streamer2.live_spectators|apnumber }}
-                    spectateurs</p>
+                <p class="subtitle">
+                    {% blocktrans with human_count=streamer1.live_spectators|add:streamer2.live_spectators|apnumber count count=streamer1.live_spectators|add:streamer2.live_spectators %}
+                        Rejoignez {{ human_count }} spectateur !
+                    {% plural %}
+                        Rejoignez {{ human_count }} spectateurs !
+                    {% endblocktrans %}
+                </p>
             {% endwith %}
         {% elif live_streamers|length %}
             <h2 class="title">Il y a {{ live_streamers.count|apnumber }} streamers en live !</h2>
-            <p class="subtitle">Rejoignez {{ all_spectators_count|apnumber }} spectateurs !</p>
+            <p class="subtitle">
+                {% blocktrans with human_count=all_spectators_count|apnumber count count=all_spectators_count %}
+                    Rejoignez {{ human_count }} spectateur !
+                {% plural %}
+                    Rejoignez {{ human_count }} spectateurs !
+                {% endblocktrans %}
+            </p>
         {% else %}
             <h2 class="title">Personne n'est en live pour le moment…</h2>
             <p class="subtitle">…mais de nouveaux streams arrivent&nbsp;!</p>
         {% endif %}
     </div>
+
     <aside>
         <p>
             <a href="#" class="button is-outlined is-white">
