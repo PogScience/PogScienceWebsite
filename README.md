@@ -31,18 +31,30 @@ We develop this website with Python 3.9+, pipenv, Django, NodeJS 12+, and webpac
 A Makefile helps developers to install and run the development environnement locally, on UNIX-like systems. Run `make`
 for help.
 
-You need to have globally available Python 3.9 or later, NodeJS 12 or later, and pipenv (`pip install pipenv`). Then:
+You need to have globally available Python 3.9 or later, NodeJS 12 or later, pipenv (`pip install pipenv`), and
+optionally [ngrok](https://ngrok.com/download) for Twitch EventSub support in development mode. Then:
 
 ```shell
 $ make install  # Install all dependencies.
-$ make run      # Run the server in development mode, and webpack in watch mode.
+$ make run      # Run the server in development mode, and webpack in watch mode,
+                # with an HTTPS tunnel for Twitch EventSub support.
 ```
 
 The port will be printed on the console. It is usually [`localhost:8000`](http://localhost:8000). For the Twitch login
-to work (see below), you have to use the `localhost` URL.
+to work (see below), you have to use the `localhost` URL (not `127.0.0.1`). A link to the ngrok control panel, including
+handy Twitch EventSub requests log and replay options, is also printed on the console (it is always
+[`127.0.0.1:4040`](http://127.0.0.1:4040)).
+
+The HTTPS tunnel should close when you stop the `make run` command with Ctrl+C. If not, use `make stop` to stop every
+PogScience background services (only ngrok, currently).
+
+⚠️ **The `make run` command above will open an HTTPS tunnel from your localhost to the internet**, with a
+randomized URL that will be displayed at the top of the command output. If you don't want to open such a tunnel, use
+`make run-local` instead.
 
 We use [`black`](https://github.com/psf/black) to format the Python code. `make install` above will install a pre-commit
-hook to reformat the whole projet at each commit. If it didn't, run `pre-commit install` from within the virtualenv.
+hook to reformat the whole projet at each commit. If it didn't, run `pre-commit install` from within the virtualenv. If
+a commit fail because of `black`, commit again. The code formatting was fixed.
 
 ### Production deployment
 

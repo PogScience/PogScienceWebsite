@@ -3,6 +3,7 @@
 secrets.toml
 static/dist
 webpack-stats.json
+.https-tunnel-hostname
 
 
 ### Node ###

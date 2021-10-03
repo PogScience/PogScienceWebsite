@@ -28,6 +28,16 @@ except IOError as e:
     print(e)
     secrets = {}
 
+# Load tunnel hostname
+try:
+    with open(BASE_DIR / ".https-tunnel-hostname") as f:
+        tunnel_hostname = f.read().strip()
+        if tunnel_hostname:
+            HOST = tunnel_hostname
+            ALLOWED_HOSTS = ["localhost", "127.0.0.1", tunnel_hostname]
+except IOError as e:
+    HOST = "localhost:8000"
+    ALLOWED_HOSTS = []
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -40,16 +50,10 @@ SECRET_KEY = secrets.get("django", {}).get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost"]
-
-if secrets["django"].get("host"):
-    ALLOWED_HOSTS.append(secrets["django"]["host"])
-
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-HOST = secrets["django"].get("host", "localhost:8000")
 
 # Application definition
 
