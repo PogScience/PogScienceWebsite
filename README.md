@@ -43,10 +43,7 @@ $ make run      # Run the server in development mode, and webpack in watch mode,
 The port will be printed on the console. It is usually [`localhost:8000`](http://localhost:8000). For the Twitch login
 to work (see below), you have to use the `localhost` URL (not `127.0.0.1`). A link to the ngrok control panel, including
 handy Twitch EventSub requests log and replay options, is also printed on the console (it is always
-[`127.0.0.1:4040`](http://127.0.0.1:4040)).
-
-The HTTPS tunnel should close when you stop the `make run` command with Ctrl+C. If not, use `make stop` to stop every
-PogScience background services (only ngrok, currently).
+[`127.0.0.1:4040`](http://127.0.0.1:4040)). [See below for details.](#how-to-test-twitch-eventsub-in-development)
 
 ⚠️ **The `make run` command above will open an HTTPS tunnel from your localhost to the internet**, with a
 randomized URL that will be displayed at the top of the command output. If you don't want to open such a tunnel, use
@@ -82,15 +79,31 @@ write the secrets in it.
 
 As Twitch need to send requests to your local installation, you'll have to install some sort of port forwarding system
 _with HTTPS support_. The simplest option is [ngrok](https://ngrok.io) with a free account. Create an account, configure
-the ngrok client as specified by their documentation, then run:
+the ngrok client as specified by their documentation, then run `make run`. ngrok will be started and the tunnel URL,
+automatically registered into Django.
+
+The HTTPS tunnel should close when you stop the `make run` command with Ctrl+C. If not, use `make stop` to stop every
+PogScience background services (only ngrok, currently).
+
+The tunnel URL change everytime you start the tunnel (so, everytime you `make run`). As Twitch store the URL to send
+requests, you need to renew every subscription with the new URL when you launch the website. To do so, run in another
+terminal:
 
 ```bash
-$ ngrok http 8000
+$ ./manage.py unsubscribe && ./manage.py subscribe
 ```
 
-(or the correct port if Django assigned another one). Finally, you need to add the ngrok URL to the Django configuration
-for Django not to reject requests from this unknown domain. Add the ngrok _domain_ (without `https://`) to the `host`
-entry of the `django` section of the `secrets.toml` file.
+_While the `subscribe` command is running, you may see a lot of 404's for `POST /twitch/eventsub/ingest` requests in the
+[ngrok inspector](http://127.0.0.1:4040/inspect/http). That's completely normal: hooks are only saved in the database
+when the command ends (because it run in a transaction), and the endpoint 404 if called for an unknown hook. Twitch will
+retry a few seconds later (using an exponential backoff), and you'll start seeing `200 OK` responses when the command
+is complete._
+
+You may also want to run this one to be in sync with the current lives.
+
+```bash
+$ ./manage.py synclivestreams --full
+```
 
 ## Commands
 
