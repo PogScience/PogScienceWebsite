@@ -296,9 +296,23 @@ class Streamer(models.Model):
         self.live = False
 
         if self.live_started_at:
-            ScheduledStream.objects.filter(
+            scheduled_streams_count = ScheduledStream.objects.filter(
                 streamer=self, start__lte=timezone.now(), end__gte=self.live_started_at
-            ).update(done=True)
+            ).update(done=True, start=self.live_started_at, end=timezone.now())
+
+            # If there was no scheduled stream, we create one matching the stream, to have
+            # accurate statistics on the past streams.
+            if scheduled_streams_count == 0:
+                ScheduledStream(
+                    streamer=self,
+                    title=self.live_title,
+                    category=self.live_game_name,
+                    start=self.live_started_at,
+                    end=timezone.now(),
+                    weekly=False,
+                    done=True,
+                ).save()
+
             self.live_started_at = None
 
     def update_colours(self):
