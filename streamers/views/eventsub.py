@@ -96,21 +96,21 @@ class EventSubIngestView(View):
     def notification_update(self) -> HttpResponse:
         streamer = self.sub.streamer
         streamer.live_title = self.event["title"]
-        streamer.live_game_name = self.event["category_name"]
+        streamer.live_game_name = self.event["category_name"] if "category_name" in self.event else None
         streamer.save()
 
         return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
     def notification_online(self) -> HttpResponse:
         streamer = self.sub.streamer
-        streamer.live = True
+        streamer.start_stream()
         streamer.save()
 
         return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
     def notification_offline(self) -> HttpResponse:
         streamer = self.sub.streamer
-        streamer.live = False
+        streamer.end_stream()
         streamer.save()
 
         return HttpResponse(status=HTTPStatus.NO_CONTENT)

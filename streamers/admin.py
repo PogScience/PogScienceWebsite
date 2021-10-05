@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.humanize.templatetags.humanize import NaturalTimeFormatter
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -48,7 +48,7 @@ class StreamerAdmin(admin.ModelAdmin):
                     "Données sur le live en cours (s'il existe) du streamer. Ces données sont automatiquement mises à "
                     "jour."
                 ),
-                "fields": ("live", "live_title", "live_game_name", "live_preview"),
+                "fields": ("live", "live_title", "live_game_name", "live_started_at", "live_preview"),
             },
         ),
         (
@@ -155,9 +155,9 @@ class FutureStreamFilter(admin.SimpleListFilter):
         if self.value() == "future":
             return queryset.filter(start__gte=now)
         elif self.value() == "live":
-            return queryset.filter(start__lte=now, end__gte=now)
+            return queryset.filter(start__lte=now, end__gte=now, done=False)
         elif self.value() == "past":
-            return queryset.filter(end__lte=now)
+            return queryset.filter(Q(end__lte=now) | Q(done=True))
 
 
 @admin.register(ScheduledStream)

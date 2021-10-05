@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n timedelta %}
 
 <article class="box live-stream{% if solo %} is-solo{% endif %}">
     <figure>
@@ -26,6 +26,9 @@
                     <span class="tag is-danger">EN DIRECT</span>
                     {% if streamer.live_end %}jusqu'à {{ streamer.live_end|date:"H\hi" }}{% endif %}
                 </time>
+                {% if streamer.duration %}
+                    <span class="time-elapsed">{{ streamer.duration|timedelta_short }}</span>
+                {% endif %}
             {% endif %}
             <button class="button shiny-button is-hover-only is-twitch is-small" disabled data-tooltip="{% trans "À venir…" %}">
                 <span class="icon is-small"><span class="fas fa-bolt"></span></span>

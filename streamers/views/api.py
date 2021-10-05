@@ -24,7 +24,7 @@ class HomeLiveAndUpcomingPartView(TemplateView):
         # the corresponding streamer is not live) and where the *end* time
         # is in the future (so streams starting late are still displayed).
         context["scheduled"] = (
-            ScheduledStream.objects.filter(streamer__live=False, end__gte=now)
+            ScheduledStream.objects.filter(streamer__live=False, end__gte=now, done=False)
             .prefetch_related("streamer")
             .order_by("start")[:4]
         )

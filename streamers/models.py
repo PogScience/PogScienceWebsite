@@ -157,6 +157,13 @@ class Streamer(models.Model):
         default=None,
         help_text=_("La catégorie du live en cours, récupéré automatiquement depuis Twitch"),
     )
+    live_started_at = models.DateTimeField(
+        verbose_name=_("début du stream"),
+        blank=True,
+        null=True,
+        default=None,
+        help_text=_("L'heure de début du live en cours"),
+    )
     live_preview = models.ImageField(
         verbose_name=_("aperçu du live"),
         storage=OverwriteStorage(),
@@ -177,6 +184,10 @@ class Streamer(models.Model):
     @property
     def twitch_url(self):
         return f"https://twitch.tv/{self.twitch_login}"
+
+    @property
+    def duration(self):
+        return timezone.now() - self.live_started_at if self.live_started_at else None
 
     @property
     def colours(self):
@@ -268,6 +279,28 @@ class Streamer(models.Model):
             # The streamer is not live: Twitch returned nothing about its stream.
             pass
 
+    def start_stream(self):
+        """
+        Starts the current stream, and store the start time of it for later use (see `end_stream`).
+        Does not save the Streamer instance.
+        """
+        self.live = True
+        self.live_started_at = timezone.now()
+
+    def end_stream(self):
+        """
+        Ends the current stream, and mark any corresponding scheduled stream as “done”, so
+        they wont show up on the homepage if the stream finished in advance.
+        Does not save the Streamer instance.
+        """
+        self.live = False
+
+        if self.live_started_at:
+            ScheduledStream.objects.filter(
+                streamer=self, start__lte=timezone.now(), end__gte=self.live_started_at
+            ).update(done=True)
+            self.live_started_at = None
+
     def update_colours(self):
         """
         Updates the streamer's main colors from its profile picture. Does not
@@ -348,8 +381,19 @@ class Streamer(models.Model):
         client = get_twitch_client()
         streams = client.get_streams(user_ids=[streamer.twitch_id for streamer in cls.objects.all()])
         online_streamers_ids = [int(stream["user_id"]) for stream in streams]
-        cls.objects.filter(twitch_id__in=online_streamers_ids).update(live=True)
-        cls.objects.filter(~Q(twitch_id__in=online_streamers_ids)).update(live=False)
+
+        # For lives with a stored start date, we don't alter it. But we add one for those who don't.
+        cls.objects.filter(twitch_id__in=online_streamers_ids, live_started_at__isnull=True).update(
+            live=True, live_started_at=timezone.now()
+        )
+        cls.objects.filter(twitch_id__in=online_streamers_ids, live_started_at__isnull=False).update(live=True)
+
+        # For offline streams, we have to call the end_stream method for each of them, as this will mark as done
+        # corresponding scheduled streams, if any.
+        offline_streamers = list(cls.objects.filter(~Q(twitch_id__in=online_streamers_ids)))
+        for streamer in offline_streamers:
+            streamer.end_stream()
+        cls.objects.bulk_update(offline_streamers, ["live", "live_started_at"])
 
 
 @receiver(pre_save, sender=Streamer)
@@ -452,6 +496,8 @@ class ScheduledStream(models.Model):
         _("identifiant interne de l'événement Google Calendar"), max_length=128, null=True, blank=True, editable=False
     )
 
+    done = models.BooleanField(_("terminé ?"), default=False)
+
     @property
     @admin.display(description=_("Durée"))
     def duration(self):
@@ -459,8 +505,7 @@ class ScheduledStream(models.Model):
 
     @property
     def now(self):
-        now = timezone.now()
-        return self.start < now < self.end
+        return self.start < timezone.now() < self.end
 
     def __str__(self):
         return f"{self.title} ({self.streamer}, {self.start} → {self.end})"
