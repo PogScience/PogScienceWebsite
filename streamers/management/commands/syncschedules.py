@@ -1,5 +1,6 @@
 import re
 import string
+from datetime import timedelta
 
 import dateutil.parser as dp
 import djclick as click
@@ -110,8 +111,10 @@ def command(reset):
                             "streamer": streamer,
                             "title": stream["title"],
                             "start": start,
-                            "end": dp.parse(stream["end_time"]),
-                            "category": stream["category"]["name"],
+                            # Some events from Twitch don't have an end time (even if they are displayed with a duration
+                            # on the schedule).
+                            "end": dp.parse(stream["end_time"]) if stream["end_time"] else start + timedelta(hours=3),
+                            "category": stream["category"]["name"] if stream["category"] else None,
                             "weekly": stream["is_recurring"],
                             "twitch_segment_id": stream["id"],
                             "google_calendar_event_id": None,
