@@ -276,7 +276,7 @@ def command(reset):
     with transaction.atomic():
         if reset:
             click.secho("Removing existing scheduled streams...", fg="cyan", bold=True, nl=False)
-            ScheduledStream.objects.filter(end__gte=now).delete()
+            ScheduledStream.objects.filter(end__gte=now, done=False).delete()
             click.secho(" OK", fg="green", bold=True)
 
         click.secho("Fetching existing scheduled streams...", fg="cyan", bold=True, nl=False)
@@ -326,8 +326,9 @@ def command(reset):
                     if scheduled is not None:
                         scheduled.streamer = event["streamer"]
                         scheduled.title = event["title"]
-                        scheduled.start = event["start"]
-                        scheduled.end = event["end"]
+                        if not scheduled.done:
+                            scheduled.start = event["start"]
+                            scheduled.end = event["end"]
                         scheduled.category = event["category"]
                         scheduled.weekly = event["weekly"]
                         scheduled.twitch_segment_id = event["twitch_segment_id"]

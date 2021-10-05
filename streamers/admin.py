@@ -163,7 +163,7 @@ class FutureStreamFilter(admin.SimpleListFilter):
 @admin.register(ScheduledStream)
 class ScheduledStreamAdmin(admin.ModelAdmin):
     date_hierarchy = "start"
-    list_display = ("title", "streamer_link", "category", "weekly", "start", "end", "duration")
+    list_display = ("title", "streamer_link", "category", "weekly", "start", "end", "duration", "done")
     list_filter = (FutureStreamFilter, "streamer", "category", "weekly")
     list_select_related = ("streamer",)
     ordering = ("start",)
