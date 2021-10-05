@@ -199,10 +199,46 @@ section.right-now
 
         width: math.div($live-stream-sol-preview-width, 2)
 
+        overflow: hidden
+
         background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
+        background: transparent
+        font-weight: 600
 
         opacity: 0
-        transition: opacity .1s ease-in-out
+        transition: opacity .1s ease-in-out, background-blend-mode .1s ease-in-out
+
+        cursor: not-allowed
+
+        z-index: 10
+
+        &:before
+          content: ""
+
+          position: absolute
+          top: 0
+          left: 0
+          right: 0
+          bottom: 0
+
+          display: block
+          height: 100%
+          width: 100%
+
+          background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
+          background-position: center
+          background-size: cover
+
+          opacity: 1
+          transition: filter .16s ease-in-out
+
+          z-index: -1
+
+        &:hover:before
+          filter: saturate(1.5)
+
+        &:active:before
+          filter: saturate(1.9)
 
     &:hover .stream-box-preview button
         opacity: 1
