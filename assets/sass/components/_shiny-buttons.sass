@@ -1,0 +1,38 @@
+$shiny-button-stripe-width: 16px
+$shiny-button-stripe-color: hsla(0, 0%, 100%, .16)
+$shiny-button-strip-border-width: 8px
+$shiny-button-strip-border-color: hsla(0, 0%, 100%, .11)
+$shiny-button-strip-angle: 30deg
+$shiny-button-animation-duration: 1.6s
+$shiny-button-animation-delay: 2s
+
+.button.shiny-button
+  position: relative
+  overflow: hidden
+
+  &:not(.is-hover-only):after, &.is-hover-only:hover:after, &.is-hover-only:active:after
+    content: " "
+    display: inline-block
+
+    position: absolute
+    top: -100%
+
+    width: $shiny-button-stripe-width
+    height: 300%
+
+    background-color: $shiny-button-stripe-color
+    border-right: solid $shiny-button-strip-border-width $shiny-button-strip-border-color
+    border-left: solid $shiny-button-strip-border-width $shiny-button-strip-border-color
+
+    filter: blur(4px)
+
+    box-sizing: content-box
+
+    transform: translate3d(-1000%, 0, 0) rotate($shiny-button-strip-angle)
+    animation: shiny-button $shiny-button-animation-duration ease-in-out $shiny-button-animation-delay infinite
+
+@-webkit-keyframes shiny-button
+    0%
+        transform: translate3d(-1000%, 0, 0) rotate($shiny-button-strip-angle)
+    to
+        transform: translate3d(1000%, 0, 0) rotate($shiny-button-strip-angle)
