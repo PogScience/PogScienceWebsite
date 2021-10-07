@@ -44,6 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
         locale: 'fr',
         firstDay: 1,
 
+        contentHeight: "auto",
+
         nowIndicator: true,
 
         // expandRows: true,
@@ -52,8 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         allDaySlot: false,
         slotEventOverlap: false,
-
-        scrollTime: "07:30:00",
 
         eventContent: info => {
             const streamer = info.event.extendedProps.streamer

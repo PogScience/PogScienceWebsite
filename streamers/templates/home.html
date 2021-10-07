@@ -23,12 +23,181 @@
     </section>
 
     <section class="section right-now">
-        <div class="container" id="js-home-live-and-upcoming"
-             data-content-url="{% url "streamers:home-part-live-upcoming" %}">
-            <div class="is-loading">
+        <div class="container"
+             id="js-home-live-and-upcoming"
+             v-scope
+             data-content-api="{% url "streamers:api-live-upcoming" %}"
+             data-calendar-url="{% url "streamers:calendar" %}"
+        >
+            {% verbatim %}
+            <div class="is-loading" v-if="store.loading">
                 <div class="is-loader"></div>
-                <div>{% trans "Chargement…" %}</div>
+                <div>Chargement…</div>
             </div>
+
+            <div v-else>
+                <header>
+
+                    <!-- TITLE AND SPECTATORS COUNT -->
+
+                    <div class="titles" v-if="store.live.length == 1">
+                        <h2 class="title">{{ store.live[0].name }} est en live !</h2>
+                        <p class="subtitle" v-if="store.total_spectators">
+                            <template v-if="store.total_spectators > 1">
+                                Rejoignez {{ store.total_spectators }} spectateurs sur {{ store.live[0].live_game_name
+                                }} !
+                            </template>
+                            <template v-else>
+                                Rejoignez {{ store.total_spectators }} spectateur sur {{ store.live[0].live_game_name }}
+                                !
+                            </template>
+                        </p>
+                        <p class="subtitle" v-else>
+                            Rejoignez plein de gens biens sur {{ store.live[0].live_game_name }}
+                        </p>
+                    </div>
+
+                    <div class="titles" v-else-if="store.live.length == 2">
+                        <h2 class="title">{{ store.live[0].name }} et {{ store.live[1].name }} sont en live !</h2>
+                        <p class="subtitle" v-if="store.total_spectators">
+                            <template v-if="store.total_spectators > 1">
+                                Rejoignez {{ store.total_spectators }} spectateurs !
+                            </template>
+                            <template v-else>
+                                Rejoignez {{ store.total_spectators }} spectateur !
+                            </template>
+                        </p>
+                        <p class="subtitle" v-else>
+                            Rejoignez plein de gens biens sur {{ store.live[0].live_game_name }}
+                        </p>
+                    </div>
+
+                    <div class="titles" v-else>
+                        <h2 class="title">{{ store.live.length }} streamers sont en live !</h2>
+                        <p class="subtitle" v-if="store.total_spectators">
+                            <template v-if="store.total_spectators > 1">
+                                Rejoignez {{ store.total_spectators }} spectateurs !
+                            </template>
+                            <template v-else>
+                                Rejoignez {{ store.total_spectators }} spectateur !
+                            </template>
+                        </p>
+                        <p class="subtitle" v-else>
+                            Rejoignez plein de gens biens sur {{ store.live[0].live_game_name }}
+                        </p>
+                    </div>
+
+                    <!-- ASIDE LINKS & TIMEZONE -->
+
+                    <aside>
+                        <p>
+                            <a :href="store.calendarURL" class="button is-outlined is-white">
+                                <span>Calendrier des streams</span>
+                                <span class="icon is-small">
+                                    <span class="fas fa-angle-right"></span>
+                                </span>
+                            </a>
+                        </p>
+                        <p class="is-timezone">Heure de Paris</p> <!-- TODO Use visitor timezone -->
+                    </aside>
+                </header>
+
+                <!-- LIVE STREAMS -->
+
+                <article class="box live-stream is-solo"
+                         v-for="streamer in store.live"
+                         :key="streamer.name"
+                >
+                    <figure>
+                        <a :href="streamer.twitch_url">
+                            <img :src="streamer.profile_image" :alt="streamer.name"/>
+                        </a>
+                    </figure>
+
+                    <a :href="streamer.twitch_url" class="stream-box-content">
+                        <h3>{{ streamer.live_title }}</h3>
+                        <div class="game">
+                            <figure class="streamer-picture-mobile">
+                                <img :src="streamer.profile_image" :alt="streamer.name"/>
+                            </figure>
+                            <span class="streamer-name">{{ streamer.name }}</span>
+                            <span class="streamer-game" v-if="streamer.live_game_name">&centerdot;&nbsp;{{ streamer.live_game_name }}</span>
+                        </div>
+
+                        <div class="game" v-if="store.live.length != 1 && streamer.live_spectators > 1">{{
+                            streamer.live_spectators }} spectateurs
+                        </div>
+                        <div class="game" v-else-if="store.live.length != 1 && streamer.live_spectators > 0">{{
+                            streamer.live_spectators }} spectateur
+                        </div>
+
+                        <footer>
+                            <time :datetime="new Date().toISOString()">
+                                <span class="tag is-danger">EN DIRECT</span>
+                                <span v-if="streamer.live_end">jusqu'à {{ shortTime(streamer.live_end) }}</span>
+                            </time>
+                            <span class="time-elapsed"
+                                  v-if="streamer.live_duration">{{ since(streamer.live_duration) }}</span>
+                            <button class="button shiny-button is-hover-only is-twitch is-small" disabled
+                                    data-tooltip="À venir…">
+                                <span class="icon is-small"><span class="fas fa-bolt"></span></span>
+                                <span>RAID</span>
+                            </button>
+                        </footer>
+                    </a>
+
+                    <div class="stream-box-preview"
+                         :style="{'--streamer-colour-1': streamer.colours_hsl_css[0], '--streamer-colour-2': streamer.colours_hsl_css[1]}">
+                        <figure class="image is-16by9 is-fullwidth">
+                            <img :src="streamer.live_preview || streamer.background_image" alt="Aperçu du live"/>
+                            <button class="button shiny-button is-twitch is-medium" disabled title="À venir…">
+                                <span class="icon"><span class="fas fa-bolt"></span></span>
+                                <span>RAID</span>
+                            </button>
+                        </figure>
+                    </div>
+                </article>
+
+                <!-- LIVES AND SCHEDULES SEPARATOR -->
+
+                <div class="divider" v-if="store.live">Mais aussi, bientôt sur Twitch</div>
+
+                <!-- SCHEDULES -->
+
+                <div class="columns is-multiline">
+                    <div class="column is-half" v-for="stream in store.scheduled" :key="stream.pk">
+                        <article class="box scheduled-stream">
+                            <figure aria-hidden="true">
+                                <a :href="stream.streamer.twitch_url">
+                                    <img :src="stream.streamer.profile_image" :alt="stream.streamer.name" />
+                                </a>
+                            </figure>
+
+                            <a :href="stream.streamer.twitch_url" class="stream-box-content">
+                                <h3>{{ stream.title }}</h3>
+                                <div class="game">
+                                    <figure class="streamer-picture-mobile">
+                                        <img :src="stream.streamer.profile_image" :alt="stream.streamer.name" />
+                                    </figure>
+
+                                    <span class="streamer-name">{{ stream.streamer.name }}</span>
+                                    <span class="streamer-game" v-if="stream.category">&nbsp;&centerdot;&nbsp;{{ stream.category }}</span>
+                                </div>
+
+                                <footer>
+                                    <time :datetime="stream.start">
+                                        <span v-if="stream.now">Prévu {{ relativeTime(stream.start) }},</span>
+                                        <span v-else>{{ capitalize(relativeTime(stream.start)) }},</span>
+                                        à {{ shortTime(stream.start) }}
+                                    </time>
+                                    <span class="fab fa-twitch"></span>
+                                </footer>
+                            </a>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            {% endverbatim %}
         </div>
     </section>
 

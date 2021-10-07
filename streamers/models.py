@@ -186,7 +186,7 @@ class Streamer(models.Model):
         return f"https://twitch.tv/{self.twitch_login}"
 
     @property
-    def duration(self):
+    def live_duration(self):
         return timezone.now() - self.live_started_at if self.live_started_at else None
 
     @property
@@ -215,6 +215,11 @@ class Streamer(models.Model):
             return h * 360, s * 100, l * 100
 
         return list(map(rgb_to_hsl, self.colours))
+
+    @property
+    def colours_hsl_css(self):
+        hsl = self.colours_hsl
+        return list(map(lambda hsl: f"hsl({hsl[0]}, {hsl[1]}%, {hsl[2]}%)", hsl))
 
     @staticmethod
     def _download_and_store_image(url, field):
