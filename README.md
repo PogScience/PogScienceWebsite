@@ -86,12 +86,8 @@ The HTTPS tunnel should close when you stop the `make run` command with Ctrl+C. 
 PogScience background services (only ngrok, currently).
 
 The tunnel URL change everytime you start the tunnel (so, everytime you `make run`). As Twitch store the URL to send
-requests, you need to renew every subscription with the new URL when you launch the website. To do so, run in another
-terminal:
-
-```bash
-$ ./manage.py unsubscribe && ./manage.py subscribe
-```
+requests, you need to renew every subscription with the new URL when you launch the website. To do so, run `make resub` in another
+terminal.
 
 _While the `subscribe` command is running, you may see a lot of 404's for `POST /twitch/eventsub/ingest` requests in the
 [ngrok inspector](http://127.0.0.1:4040/inspect/http). That's completely normal: hooks are only saved in the database

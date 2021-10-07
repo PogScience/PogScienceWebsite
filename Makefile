@@ -45,6 +45,13 @@ stop-tunnel: ## Closes the HTTPS tunnel by killing ngrok.
 stop: stop-tunnel ## Stops every service running in the background.
 
 ##
+## ~ Utilities
+
+resub: ## Unsubscribes then re-subscribes to Twitch EventSub, for when the HTTPS tunnel changes. The server must be running.
+	pipenv run python manage.py unsubscribe
+	pipenv run python manage.py subscribe
+
+##
 ## ~ Other
 
 # inspired from https://gist.github.com/sjparkinson/f0413d429b12877ecb087c6fc30c1f0a
