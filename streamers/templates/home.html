@@ -187,8 +187,14 @@
                     <div class="modal-content is-streamer is-full-color"
                          :style="{'--streamer-colour-1': store.preview_streamer.colours_hsl_css[0], '--streamer-colour-2': store.preview_streamer.colours_hsl_css[1]}">
                         <header>
-                            <figure><img :src="store.preview_streamer.profile_image" alt=""></figure>
-                            <h3><span>{{ store.preview_streamer.name }}</span></h3>
+                            <figure>
+                                <a :href="store.preview_streamer.twitch_url">
+                                    <img :src="store.preview_streamer.profile_image" alt="" />
+                                </a>
+                            </figure>
+                            <h3>
+                                <a :href="store.preview_streamer.twitch_url">{{ store.preview_streamer.name }}</a>
+                            </h3>
                             <div class="tooltip has-tooltip-left" data-tooltip="À venir…">
                                 <button class="button is-shiny has-streamer-color is-white is-medium"
                                         disabled
@@ -201,8 +207,10 @@
                                 </button>
                             </div>
                         </header>
+
                         <figure id="js-twitch-preview"></figure>
                     </div>
+
                     <button class="modal-close is-large" aria-label="close" @click="hidePreview()"></button>
                 </div>
 
