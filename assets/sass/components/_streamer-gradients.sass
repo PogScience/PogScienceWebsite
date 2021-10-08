@@ -1,0 +1,53 @@
+%streamer-border
+  border: .4rem solid transparent
+  background-image: linear-gradient(white, white), linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
+  background-origin: border-box
+  background-clip: content-box, border-box
+  border-radius: 6px
+
+%streamer-background
+  padding: .4rem
+  background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
+  border-radius: 6px
+
+button.button.is-streamer-gradient
+  overflow: hidden
+
+  border: none
+
+  background: transparent
+  font-weight: 600
+
+  z-index: 10
+
+  &[disabled]
+    cursor: not-allowed
+    opacity: 1
+
+  &:before
+    content: ""
+
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+    display: block
+    height: 100%
+    width: 100%
+
+    background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
+    background-position: center
+    background-size: cover
+
+    opacity: 1
+    transition: filter .16s ease-in-out
+
+    z-index: -1
+
+  &:hover:before
+    filter: saturate(1.5)
+
+  &:active:before
+    filter: saturate(1.9)

@@ -2,6 +2,10 @@
 
 {% load i18n cache %}
 
+{% block js %}
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+{% endblock %}
+
 {% block content %}
     <section class="hero is-medium is-primary">
         <div class="hero-body">
@@ -40,7 +44,11 @@
 
                     <!-- TITLE AND SPECTATORS COUNT -->
 
-                    <div class="titles" v-if="store.live.length == 1">
+                    <div class="titles" v-if="store.live.length == 0">
+                        <h2 class="title">Personne n'est en live actuellement !</h2>
+                        <p class="subtitle">Mais restez à l'écoute, car de nouveaux streams approchent…</p>
+                    </div>
+                    <div class="titles" v-else-if="store.live.length == 1">
                         <h2 class="title">{{ store.live[0].name }} est en live !</h2>
                         <p class="subtitle" v-if="store.total_spectators">
                             <template v-if="store.total_spectators > 1">
@@ -138,7 +146,7 @@
                             </time>
                             <span class="time-elapsed"
                                   v-if="streamer.live_duration">{{ since(streamer.live_duration) }}</span>
-                            <button class="button shiny-button is-hover-only is-twitch is-small" disabled
+                            <button class="button is-shiny is-hover-only is-streamer-gradient is-small" disabled
                                     data-tooltip="À venir…">
                                 <span class="icon is-small"><span class="fas fa-bolt"></span></span>
                                 <span>RAID</span>
@@ -149,18 +157,60 @@
                     <div class="stream-box-preview"
                          :style="{'--streamer-colour-1': streamer.colours_hsl_css[0], '--streamer-colour-2': streamer.colours_hsl_css[1]}">
                         <figure class="image is-16by9 is-fullwidth">
-                            <img :src="streamer.live_preview || streamer.background_image" alt="Aperçu du live"/>
-                            <button class="button shiny-button is-twitch is-medium" disabled title="À venir…">
-                                <span class="icon"><span class="fas fa-bolt"></span></span>
-                                <span>RAID</span>
-                            </button>
+                            <img :src="(streamer.live_preview || streamer.background_image) + `#${Date.now()}`"
+                                 alt="Aperçu du live"/>
+                            <div class="buttons">
+                                <div class="tooltip has-tooltip-top" data-tooltip="Prévisualiser le stream">
+                                    <button class="button is-streamer-gradient is-medium"
+                                            aria-label="Prévisualiser le stream"
+                                            @click="showPreview(streamer)">
+                                        <span class="icon"><span class="fas fa-tv"></span></span>
+                                    </button>
+                                </div>
+                                <div class="tooltip has-tooltip-top" data-tooltip="À venir…">
+                                    <button class="button is-shiny is-streamer-gradient is-medium"
+                                            disabled
+                                            aria-label="À venir…">
+                                        <span class="icon"><span class="fas fa-bolt"></span></span>
+                                        <span>RAID</span>
+                                    </button>
+                                </div>
+                            </div>
                         </figure>
                     </div>
                 </article>
 
+                <!-- STREAM PREVIEW MODAL -->
+
+                <div class="modal" :class="{'is-active': store.preview_open}" v-if="store.preview_streamer">
+                    <div class="modal-background" @click="hidePreview()"></div>
+                    <div class="modal-content is-streamer is-full-color"
+                         :style="{'--streamer-colour-1': store.preview_streamer.colours_hsl_css[0], '--streamer-colour-2': store.preview_streamer.colours_hsl_css[1]}">
+                        <header>
+                            <figure><img :src="store.preview_streamer.profile_image" alt=""></figure>
+                            <h3><span>{{ store.preview_streamer.name }}</span></h3>
+                            <div class="tooltip has-tooltip-left" data-tooltip="À venir…">
+                                <button class="button is-shiny has-streamer-color is-white is-medium"
+                                        disabled
+                                        aria-label="À venir…">
+                                    <span class="icon"><span class="fas fa-bolt"></span></span>
+                                    <span class="has-spectators">
+                                        <span class="raid">RAID</span>
+                                        <span class="spectators">{{ store.preview_streamer.live_spectators }} spectateurs</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </header>
+                        <figure id="js-twitch-preview"></figure>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close" @click="hidePreview()"></button>
+                </div>
+
                 <!-- LIVES AND SCHEDULES SEPARATOR -->
 
-                <div class="divider" v-if="store.live">Mais aussi, bientôt sur Twitch</div>
+                <div class="divider" v-if="store.live.length > 0 && store.scheduled.length > 0">Mais aussi, bientôt sur
+                    Twitch
+                </div>
 
                 <!-- SCHEDULES -->
 
@@ -169,7 +219,7 @@
                         <article class="box scheduled-stream">
                             <figure aria-hidden="true">
                                 <a :href="stream.streamer.twitch_url">
-                                    <img :src="stream.streamer.profile_image" :alt="stream.streamer.name" />
+                                    <img :src="stream.streamer.profile_image" :alt="stream.streamer.name"/>
                                 </a>
                             </figure>
 
@@ -177,11 +227,11 @@
                                 <h3>{{ stream.title }}</h3>
                                 <div class="game">
                                     <figure class="streamer-picture-mobile">
-                                        <img :src="stream.streamer.profile_image" :alt="stream.streamer.name" />
+                                        <img :src="stream.streamer.profile_image" :alt="stream.streamer.name"/>
                                     </figure>
 
                                     <span class="streamer-name">{{ stream.streamer.name }}</span>
-                                    <span class="streamer-game" v-if="stream.category">&nbsp;&centerdot;&nbsp;{{ stream.category }}</span>
+                                    <span class="streamer-game" v-if="stream.category">&centerdot;&nbsp;{{ stream.category }}</span>
                                 </div>
 
                                 <footer>

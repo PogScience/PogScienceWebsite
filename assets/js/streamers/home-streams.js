@@ -1,4 +1,4 @@
-import {createApp, reactive} from "petite-vue"
+import {createApp, reactive, nextTick} from "petite-vue"
 
 import fetch from "../common/fetch"
 import {Interval} from "luxon";
@@ -27,11 +27,50 @@ document.addEventListener("DOMContentLoaded", () => {
         total_spectators: 0,
         loading: true,
 
+        preview_open: false,
+        preview_streamer: null,
+
         calendarURL,
     })
 
+    let twitchPlayer = null
+
     createApp({
         store,
+
+        showPreview(streamer) {
+            store.preview_streamer = streamer
+            store.preview_open = true
+
+            nextTick(() => {
+                // We need to create a new player because the modale was never
+                // opened before.
+                if (!twitchPlayer) {
+                    twitchPlayer = new Twitch.Embed("js-twitch-preview", {
+                        width: "100%",
+                        height: "100%",
+                        autoplay: true,
+                        channel: streamer.twitch_login,
+                        layout: "video-with-chat",
+                        theme: "dark",
+                        parent: ["pogscience-stream.com"],
+                    })
+                }
+
+                // We can only change the channel and play.
+                else {
+                    twitchPlayer.setChannel(streamer.twitch_login)
+                    twitchPlayer.play()
+                }
+            })
+        },
+
+        hidePreview() {
+            store.preview_open = false
+            if (twitchPlayer) {
+                twitchPlayer.pause()
+            }
+        },
 
         capitalize(str) {
             return str.replace(/^\p{CWU}/u, char => char.toLocaleUpperCase());
@@ -63,6 +102,16 @@ document.addEventListener("DOMContentLoaded", () => {
             store.total_spectators = data.live.reduce((all, cur) => cur.live_spectators + all, 0)
 
             store.loading = false
+
+            // Updates the twitch preview, mainly spectators count, if any
+            if (store.preview_streamer) {
+                for (const streamer of data.live) {
+                    if (store.preview_streamer.twitch_login === streamer.twitch_login) {
+                        store.preview_streamer = streamer
+                        break
+                    }
+                }
+            }
         })
     }
 

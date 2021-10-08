@@ -94,7 +94,7 @@ section.right-now
   background-color: $grey-dark
   color: $white
 
-  .container > .is-loading
+  > .container > .is-loading
     display: flex
     align-items: center
     justify-content: center
@@ -103,7 +103,7 @@ section.right-now
       @include loader
       margin-right: .4rem
 
-  header
+  > .container header
     display: flex
     flex-direction: row
 
@@ -185,62 +185,27 @@ section.right-now
         display: none
 
       img
-        border: 6px solid transparent
-        background-image: linear-gradient(white, white), linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
-        background-origin: border-box
-        background-clip: content-box, border-box
-        border-radius: 6px
+        @extend %streamer-border
         height: 100%
 
-      button
+      .buttons
         position: absolute
         bottom: -6px
-        left: calc(50% - #{math.div($live-stream-sol-preview-width, 4)})
+        left: 0
 
-        width: math.div($live-stream-sol-preview-width, 2)
+        display: flex
+        flex-direction: row
+        justify-content: center
 
-        overflow: hidden
-
-        background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
-        background: transparent
-        font-weight: 600
+        width: $live-stream-sol-preview-width
 
         opacity: 0
-        transition: opacity .1s ease-in-out, background-blend-mode .1s ease-in-out
+        transition: opacity .1s ease-in-out
 
-        cursor: not-allowed
+        > *:not(:last-child)
+          margin-right: .6rem
 
-        z-index: 10
-
-        &:before
-          content: ""
-
-          position: absolute
-          top: 0
-          left: 0
-          right: 0
-          bottom: 0
-
-          display: block
-          height: 100%
-          width: 100%
-
-          background-image: linear-gradient(to bottom right, var(--streamer-colour-1), var(--streamer-colour-2))
-          background-position: center
-          background-size: cover
-
-          opacity: 1
-          transition: filter .16s ease-in-out
-
-          z-index: -1
-
-        &:hover:before
-          filter: saturate(1.5)
-
-        &:active:before
-          filter: saturate(1.9)
-
-    &:hover .stream-box-preview button
+    &:hover .stream-box-preview .buttons
         opacity: 1
 
 

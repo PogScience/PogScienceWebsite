@@ -6,7 +6,7 @@ $shiny-button-strip-angle: 30deg
 $shiny-button-animation-duration: 1.6s
 $shiny-button-animation-delay: 2s
 
-.button.shiny-button
+.button.is-shiny
   position: relative
   overflow: hidden
 
@@ -30,6 +30,12 @@ $shiny-button-animation-delay: 2s
 
     transform: translate3d(-1000%, 0, 0) rotate($shiny-button-strip-angle)
     animation: shiny-button $shiny-button-animation-duration ease-in-out $shiny-button-animation-delay infinite
+
+  &.has-streamer-color:not(.is-hover-only):after, &.has-streamer-color.is-hover-only:hover:after, &.has-streamer-color.is-hover-only:active:after
+    background-color: var(--streamer-colour-1)
+    border-right: solid $shiny-button-strip-border-width var(--streamer-colour-2)
+    border-left: solid $shiny-button-strip-border-width var(--streamer-colour-2)
+    opacity: .1
 
 @-webkit-keyframes shiny-button
     0%
