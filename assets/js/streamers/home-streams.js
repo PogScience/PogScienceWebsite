@@ -1,8 +1,9 @@
 import {createApp, reactive, nextTick} from "petite-vue"
 
 import fetch from "../common/fetch"
-import {Interval} from "luxon";
-import {selectUnit} from "@formatjs/intl-utils";
+import {Interval} from "luxon"
+import {selectUnit} from "@formatjs/intl-utils"
+import tinycolor from "tinycolor2"
 
 document.addEventListener("DOMContentLoaded", () => {
     const streamsContainer = document.getElementById("js-home-live-and-upcoming")
@@ -38,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
     createApp({
         store,
 
+        /**
+         * Opens the stream preview modal for the given streamer.
+         * @param streamer The streamer object.
+         */
         showPreview(streamer) {
             store.preview_streamer = streamer
             store.preview_open = true
@@ -65,6 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         },
 
+        /**
+         * Closes the open stream preview modal, if any.
+         */
         hidePreview() {
             store.preview_open = false
             if (twitchPlayer) {
@@ -72,19 +80,61 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         },
 
+        /**
+         * Returns the text color to use on the gradient buttons for the given
+         * streamer.
+         * @param streamer The streamer.
+         * @return {string} The color to use for the text.
+         */
+        streamerButtonTextColour(streamer) {
+            return tinycolor.mostReadable(
+                streamer.colours_hsl_css[0],
+                ["#faf3f3", "#363636"],
+                {
+                    includeFallbackColors: true,
+                    level: "AAA",
+                    size: "large"
+                },
+            ).toHexString()
+        },
+
+        /**
+         * Capitalizes a string.
+         * @param str The string.
+         * @returns {string} A capitalized version of the string, with the first
+         *                   unicode point capitalized (if it can be) and the
+         *                   remaining left as-is.
+         */
         capitalize(str) {
             return str.replace(/^\p{CWU}/u, char => char.toLocaleUpperCase());
         },
 
+        /**
+         * Format a datetime string in hh:mm.
+         * @param date A date string in ISO format (or anything the Date
+         *             constructor accepts).
+         * @returns {string} The formatted hour.
+         */
         shortTime(date) {
             return formatTimeShort.format(new Date(date))
         },
 
+        /**
+         * Formats a date relatively (e.g. “tomorrow”, “in 2 hours”, “in 10 minutes”…)
+         * @param date A date string in ISO format (or anything the Date
+         *             constructor accepts).
+         * @returns {string} The formatted time.
+         */
         relativeTime(date) {
             const diff = selectUnit(new Date(date))
             return formatRelativeTime.format(diff.value, diff.unit)
         },
 
+        /**
+         * Formats the given duration, in hh:mm format.
+         * @param seconds The amount of seconds.
+         * @returns {string} The formatted duration, in hh:mm.
+         */
         since(seconds) {
             const d = Interval.before(new Date(), parseInt(seconds) * 1000)
                 .toDuration(['hours', 'minutes']).toObject()

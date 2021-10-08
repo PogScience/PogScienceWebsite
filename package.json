@@ -11,7 +11,8 @@
     "@fullcalendar/timegrid": "^5.9.0",
     "@vue/reactivity": "^3.2.19",
     "luxon": "^2.0.2",
-    "petite-vue": "^0.3.0"
+    "petite-vue": "^0.3.0",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

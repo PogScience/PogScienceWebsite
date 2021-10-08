@@ -155,7 +155,7 @@
                     </a>
 
                     <div class="stream-box-preview"
-                         :style="{'--streamer-colour-1': streamer.colours_hsl_css[0], '--streamer-colour-2': streamer.colours_hsl_css[1]}">
+                         :style="{'--streamer-colour-1': streamer.colours_hsl_css[0], '--streamer-colour-2': streamer.colours_hsl_css[1], '--streamer-color-text': streamerButtonTextColour(streamer)}">
                         <figure class="image is-16by9 is-fullwidth">
                             <img :src="(streamer.live_preview || streamer.background_image) + `#${Date.now()}`"
                                  alt="Aperçu du live"/>
