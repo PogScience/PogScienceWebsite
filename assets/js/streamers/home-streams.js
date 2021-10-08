@@ -88,12 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
          */
         streamerButtonTextColour(streamer) {
             return tinycolor.mostReadable(
-                streamer.colours_hsl_css[0],
+                tinycolor.mix(streamer.colours_hsl_css[0], streamer.colours_hsl_css[1]),
                 ["#faf3f3", "#363636"],
                 {
                     includeFallbackColors: true,
                     level: "AAA",
-                    size: "large"
+                    size: "small"
                 },
             ).toHexString()
         },
