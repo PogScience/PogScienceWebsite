@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const streamsLiveURL = streamsContainer.getAttribute("data-content-api")
     const calendarURL = streamsContainer.getAttribute("data-calendar-url")
+    const raidAPI = streamsContainer.getAttribute("data-raid-api")
 
     const formatTimeShort = new Intl.DateTimeFormat(undefined, {
         hour: "2-digit",
@@ -78,6 +79,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (twitchPlayer) {
                 twitchPlayer.pause()
             }
+        },
+
+        /**
+         * Raids a streamer.
+         * @param streamer The streamer object.
+         */
+        raid(streamer) {
+            fetch(raidAPI.replace("TWITCH_LOGIN", streamer.twitch_login), { method: "POST"}).then(r => r.json()).then(console.log)
         },
 
         /**

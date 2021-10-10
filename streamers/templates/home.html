@@ -32,6 +32,7 @@
              v-scope
              data-content-api="{% url "streamers:api-live-upcoming" %}"
              data-calendar-url="{% url "streamers:calendar" %}"
+             data-raid-api="{% url "streamers:api-raid" "TWITCH_LOGIN" %}"
         >
             {% verbatim %}
             <div class="is-loading" v-if="store.loading">
@@ -146,8 +147,9 @@
                             </time>
                             <span class="time-elapsed"
                                   v-if="streamer.live_duration">{{ since(streamer.live_duration) }}</span>
-                            <button class="button is-shiny is-hover-only is-streamer-gradient is-small" disabled
-                                    data-tooltip="À venir…">
+                            <button class="button is-shiny is-hover-only is-streamer-gradient is-small"
+                                    :data-tooltip="'Faire un RAID vers ' + streamer.name"
+                                    @click="raid(streamer)">
                                 <span class="icon is-small"><span class="fas fa-bolt"></span></span>
                                 <span>RAID</span>
                             </button>
@@ -167,10 +169,10 @@
                                         <span class="icon"><span class="fas fa-tv"></span></span>
                                     </button>
                                 </div>
-                                <div class="tooltip has-tooltip-top" data-tooltip="À venir…">
+                                <div class="tooltip has-tooltip-top" :data-tooltip="'Faire un RAID vers ' + streamer.name">
                                     <button class="button is-shiny is-streamer-gradient is-medium"
-                                            disabled
-                                            aria-label="À venir…">
+                                            :aria-label="'Faire un RAID vers ' + streamer.name"
+                                            @click="raid(streamer)">
                                         <span class="icon"><span class="fas fa-bolt"></span></span>
                                         <span>RAID</span>
                                     </button>
@@ -195,10 +197,10 @@
                             <h3>
                                 <a :href="store.preview_streamer.twitch_url">{{ store.preview_streamer.name }}</a>
                             </h3>
-                            <div class="tooltip has-tooltip-left" data-tooltip="À venir…">
+                            <div class="tooltip has-tooltip-left" :data-tooltip="'Faire un RAID vers ' + streamer.name">
                                 <button class="button is-shiny has-streamer-color is-white is-medium"
-                                        disabled
-                                        aria-label="À venir…">
+                                        :aria-label="'Faire un RAID vers ' + streamer.name"
+                                        @click="raid(streamer)">
                                     <span class="icon"><span class="fas fa-bolt"></span></span>
                                     <span class="has-spectators">
                                         <span class="raid">RAID</span>

@@ -9,7 +9,7 @@ class TwitchOAuth2(PSATwitchOAuth2):
     """
 
     ID_KEY = "id"
-    DEFAULT_SCOPE = ["user:read:email"]
+    DEFAULT_SCOPE = ["user:read:email", "chat:read", "chat:edit", "channel_editor"]
     STATE_PARAMETER = "state"
 
     def get_user_details(self, response):

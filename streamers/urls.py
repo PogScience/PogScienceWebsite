@@ -7,6 +7,7 @@ from streamers.views.api import (
     ScheduledStreamsAPIView,
     StreamersResourcesAPIView,
 )
+from streamers.views.raid import RaidAPIView
 
 app_name = "streamers"
 
@@ -16,5 +17,6 @@ urlpatterns = [
     path("api/live-and-upcoming", LiveAndUpcomingAPIView.as_view(), name="api-live-upcoming"),
     path("api/scheduled", ScheduledStreamsAPIView.as_view(), name="api-scheduled"),
     path("api/streamers-resources", StreamersResourcesAPIView.as_view(), name="api-streamers-resources"),
+    path("api/raid/<str:twitch_login>", RaidAPIView.as_view(), name="api-raid"),
     path("twitch/eventsub/ingest", EventSubIngestView.as_view(), name="eventsub-ingest"),
 ]
