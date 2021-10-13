@@ -27,6 +27,13 @@ $button-text-decoration: none;
 $card-radius: 6px;
 $hero-body-padding-medium: 10rem 6rem;
 
+$code: darken($twitch, 15%);
+
+$notification-padding: 1rem;
+$notification-padding-ltr: 1rem;
+$notification-padding-rtl: 1rem;
+$notification-radius: 6px;
+
 // Import only what you need from Bulma
 @import "~bulma/sass/utilities/all";
 @import "~bulma/sass/base/all";
@@ -40,6 +47,7 @@ $hero-body-padding-medium: 10rem 6rem;
 @import "~bulma/sass/elements/image";
 @import "~bulma/sass/elements/title";
 @import "~bulma/sass/elements/tag";
+@import "~bulma/sass/elements/notification";
 @import "~bulma/sass/form/all";
 @import "~bulma/sass/components/card";
 @import "~bulma/sass/components/navbar";

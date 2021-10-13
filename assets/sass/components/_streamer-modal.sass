@@ -9,8 +9,9 @@
   &:not(.is-full-color)
     @extend %streamer-border
 
-  width: 90%
-  height: 90vh
+  &.is-fullscreen
+    width: 90%
+    height: 90vh
 
   header
     display: flex
@@ -79,3 +80,46 @@
 
     iframe
       border-radius: 6px
+
+  article
+    padding: .6rem 1rem 1rem
+    border-radius: 6px
+    background: $white
+    color: $grey-darker
+
+    > div
+      margin-bottom: 1rem
+
+    h3
+      font-size: $size-5
+      font-weight: 600
+      margin-bottom: 1rem
+
+      & + p
+        margin-top: -.6rem
+
+    p
+      margin-bottom: 1rem
+
+    .notification
+      line-height: 1.2
+
+      details
+        summary
+          cursor: pointer
+
+        p:last-child
+          margin-bottom: 0
+
+        &[open]
+          summary
+            margin-bottom: 1rem
+            font-weight: 600
+
+    .columns
+      &, .column, .buttons
+        margin: 0
+        padding: 0
+
+    button.button
+      margin-bottom: 0

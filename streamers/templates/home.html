@@ -33,6 +33,8 @@
              data-content-api="{% url "streamers:api-live-upcoming" %}"
              data-calendar-url="{% url "streamers:calendar" %}"
              data-raid-api="{% url "streamers:api-raid" "TWITCH_LOGIN" %}"
+             data-is-logged-in="{{ request.user.is_authenticated }}"
+             data-login-url="{% url "social:begin" "twitch" %}"
         >
             {% verbatim %}
             <div class="is-loading" v-if="store.loading">
@@ -169,7 +171,8 @@
                                         <span class="icon"><span class="fas fa-tv"></span></span>
                                     </button>
                                 </div>
-                                <div class="tooltip has-tooltip-top" :data-tooltip="'Faire un RAID vers ' + streamer.name">
+                                <div class="tooltip has-tooltip-top"
+                                     :data-tooltip="'Faire un RAID vers ' + streamer.name">
                                     <button class="button is-shiny is-streamer-gradient is-medium"
                                             :aria-label="'Faire un RAID vers ' + streamer.name"
                                             @click="raid(streamer)">
@@ -186,21 +189,22 @@
 
                 <div class="modal" :class="{'is-active': store.preview_open}" v-if="store.preview_streamer">
                     <div class="modal-background" @click="hidePreview()"></div>
-                    <div class="modal-content is-streamer is-full-color"
+                    <div class="modal-content is-streamer is-full-color is-fullscreen"
                          :style="{'--streamer-colour-1': store.preview_streamer.colours_hsl_css[0], '--streamer-colour-2': store.preview_streamer.colours_hsl_css[1]}">
                         <header>
                             <figure>
                                 <a :href="store.preview_streamer.twitch_url">
-                                    <img :src="store.preview_streamer.profile_image" alt="" />
+                                    <img :src="store.preview_streamer.profile_image" alt=""/>
                                 </a>
                             </figure>
                             <h3>
                                 <a :href="store.preview_streamer.twitch_url">{{ store.preview_streamer.name }}</a>
                             </h3>
-                            <div class="tooltip has-tooltip-left" :data-tooltip="'Faire un RAID vers ' + streamer.name">
+                            <div class="tooltip has-tooltip-left"
+                                 :data-tooltip="'Faire un RAID vers ' + store.preview_streamer.name">
                                 <button class="button is-shiny has-streamer-color is-white is-medium"
-                                        :aria-label="'Faire un RAID vers ' + streamer.name"
-                                        @click="raid(streamer)">
+                                        :aria-label="'Faire un RAID vers ' + store.preview_streamer.name"
+                                        @click="raid(store.preview_streamer)">
                                     <span class="icon"><span class="fas fa-bolt"></span></span>
                                     <span class="has-spectators">
                                         <span class="raid">RAID</span>
@@ -214,6 +218,103 @@
                     </div>
 
                     <button class="modal-close is-large" aria-label="close" @click="hidePreview()"></button>
+                </div>
+
+                <!-- RAID CONFIRMATION MODAL -->
+
+                <div class="modal" :class="{'is-active': store.raid_confirmation_open}" v-if="store.raiding_streamer">
+                    <div class="modal-background" @click="cancelRaid()"></div>
+                    <div class="modal-content is-streamer is-full-color"
+                         :style="{'--streamer-colour-1': store.raiding_streamer.colours_hsl_css[0], '--streamer-colour-2': store.raiding_streamer.colours_hsl_css[1], '--streamer-color-text': streamerButtonTextColour(store.raiding_streamer)}">
+                        <header>
+                            <figure>
+                                <a :href="store.raiding_streamer.twitch_url">
+                                    <img :src="store.raiding_streamer.profile_image" alt=""/>
+                                </a>
+                            </figure>
+                            <h3>
+                                <a :href="store.raiding_streamer.twitch_url">{{ store.raiding_streamer.name }}</a>
+                            </h3>
+                        </header>
+
+                        <article>
+                            <div v-if="store.logged_in">
+                                <h3>Êtes-vous sûr⋅e de vouloir faire un raid vers {{ store.raiding_streamer.name }}
+                                    ?</h3>
+                                <div class="buttons is-centered">
+                                    <button class="button is-shiny is-streamer-gradient is-medium"
+                                            :class="{'is-loading': store.raid_in_progress}"
+                                            :aria-label="'Faire un RAID vers ' + store.raiding_streamer.name"
+                                            :disabled="store.raid_in_progress"
+                                            @click="!store.raid_in_progress && confirmRaid(store.raiding_streamer)"
+                                            v-if="!store.raid_success">
+                                        <span class="icon"><span class="fas fa-bolt"></span></span>
+                                        <span>RAID</span>
+                                    </button>
+
+                                    <button class="button is-streamer-gradient is-medium" disabled v-else>
+                                        <span class="icon"><span class="fas fa-check"></span></span>
+                                        <span>Raid vers {{ store.raiding_streamer.name }} préparé avec succès !</span>
+                                    </button>
+                                </div>
+
+                                <p class="has-text-centered" v-if="store.raid_success">Confirmez le raid en haut de
+                                    votre chat pour envoyer vos spectateurs.</p>
+                            </div>
+
+                            <div v-else>
+                                <h3>Vous devez vous connecter pour pouvoir raid en un clic.</h3>
+
+                                <p>
+                                    La connexion avec Twitch ne vous prendra même pas dix secondes et vous permettra de
+                                    raid des streamers de PogScience en un clic, entre autres avantages.
+                                </p>
+
+                                <div class="buttons is-centered">
+                                    <a :href="store.loginURL" class="button is-twitch is-medium">
+                                        <span class="icon"><span class="fab fa-twitch"></span></span>
+                                        <span>Se connecter avec Twitch</span>
+                                    </a>
+                                </div>
+
+                                <div class="notification is-twitch is-light">
+                                    <details>
+                                        <summary>Explication des permissions demandées</summary>
+                                        <p>
+                                            Plusieurs permissions seront demandées, notamment pour écrire dans le chat
+                                            et gérer diverses parties de votre chaîne. Ces permissions servent à pouvoir
+                                            envoyer automatiquement la commande <code>/raid</code>.
+                                        </p>
+                                        <p>
+                                            Elles viennent en groupe, d'où la demande d'autres permissions qui
+                                            pourraient sembler hors-sujet, notamment celle concernant la découpe des
+                                            vidéos à la demande. Nous n'utiliseront pas ces permissions.
+                                        </p>
+                                    </details>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column is-half">
+                                    <button class="button is-light" @click="showPreview(store.raiding_streamer)"
+                                            :disabled="store.raid_in_progress">Prévisualiser le stream
+                                    </button>
+                                </div>
+                                <div class="column is-half">
+                                    <div class="has-text-right">
+                                        <button class="button is-light" @click="cancelRaid()"
+                                                :disabled="store.raid_in_progress" v-if="store.raid_success">Fermer
+                                        </button>
+                                        <button class="button is-light" @click="cancelRaid()"
+                                                :disabled="store.raid_in_progress" v-else>Finalement, non
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <button class="modal-close is-large" aria-label="close" @click="cancelRaid()"></button>
                 </div>
 
                 <!-- LIVES AND SCHEDULES SEPARATOR -->

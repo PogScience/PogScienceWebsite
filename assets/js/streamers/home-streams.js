@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const calendarURL = streamsContainer.getAttribute("data-calendar-url")
     const raidAPI = streamsContainer.getAttribute("data-raid-api")
 
+    const loggedIn = streamsContainer.getAttribute("data-is-logged-in") === "True"
+    const loginURL = streamsContainer.getAttribute("data-login-url")
+
     const formatTimeShort = new Intl.DateTimeFormat(undefined, {
         hour: "2-digit",
         minute: "2-digit",
@@ -29,10 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
         total_spectators: 0,
         loading: true,
 
+        logged_in: loggedIn,
+
         preview_open: false,
         preview_streamer: null,
 
+        raid_confirmation_open: false,
+        raiding_streamer: null,
+        raid_in_progress: false,
+        raid_success: false,
+
         calendarURL,
+        loginURL,
     })
 
     let twitchPlayer = null
@@ -45,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
          * @param streamer The streamer object.
          */
         showPreview(streamer) {
+            store.raid_confirmation_open = false
+
             store.preview_streamer = streamer
             store.preview_open = true
 
@@ -82,11 +95,38 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         /**
-         * Raids a streamer.
-         * @param streamer The streamer object.
+         * Opens the confirmation modal to raid a streamer.
+         * @param streamer
          */
         raid(streamer) {
-            fetch(raidAPI.replace("TWITCH_LOGIN", streamer.twitch_login), { method: "POST"}).then(r => r.json()).then(console.log)
+            store.raiding_streamer = streamer
+            store.raid_confirmation_open = true
+
+            if (twitchPlayer) {
+                twitchPlayer.pause()
+            }
+        },
+
+        /**
+         * Closes the confirmation modal to raid a streamer, without raiding the streamer.
+         */
+        cancelRaid() {
+            store.raid_confirmation_open = false
+            store.raid_in_progress = false
+            store.raid_success = false
+        },
+
+        /**
+         * Raids a streamer.
+         */
+        confirmRaid() {
+            store.raid_in_progress = true
+
+            fetch(raidAPI.replace("TWITCH_LOGIN", store.raiding_streamer.twitch_login), { method: "POST"})
+                .then(() => {
+                    store.raid_in_progress = false
+                    store.raid_success = true
+                })
         },
 
         /**
