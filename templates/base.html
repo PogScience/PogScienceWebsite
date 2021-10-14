@@ -31,7 +31,7 @@
                         Se connecter avec Twitch
                     </a>
                 {% else %}
-                    {{ request.user.first_name }} &centerdot;
+                    {{ request.user.username }} &centerdot;
                     <a href="{% url "administration:index" %}">
                         Administration
                     </a> &centerdot;

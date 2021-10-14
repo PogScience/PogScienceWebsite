@@ -7,6 +7,8 @@ name = "pypi"
 django = "*"
 django-debug-toolbar = "*"
 toml = "*"
+# Commit in the currently in-dev version with the updated Twitch API
+social-auth-core = {git = "https://github.com/python-social-auth/social-core", ref = "17476e32ec16d3d0a4c261947a1dd814f3432bd5"}
 social-auth-app-django = "*"
 django-bulma-form-templates = "*"
 django-webpack-loader = "*"
@@ -21,6 +23,7 @@ python-twitch-client = {git = "https://github.com/tsifrer/python-twitch-client"}
 djangorestframework = "*"
 numpy = "*"
 scipy = "*"
+python-jose = ">=3.0.0"
 
 [dev-packages]
 pre-commit = "*"
