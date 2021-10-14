@@ -114,7 +114,7 @@ class StreamerAdmin(admin.ModelAdmin):
             elif sub.status == EventSubSubscription.UNSUBSCRIBED:
                 color = "dd4646"
             elif sub.status == EventSubSubscription.PENDING:
-                color = "ffc"
+                color = "4343f5"
             else:
                 color = "ccc"
 
